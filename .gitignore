@@ -1,0 +1,56 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Output of the 'go build' command
+*.out
+
+# Dependency directories (remove the comment below if you use vendoring)
+# /vendor/
+
+# Go workspace file
+go.work
+go.work.sum
+
+# Go test binary, coverage, and profiling data
+*.test
+*.test.exe
+*.test~ 
+*.test.out
+*.coverprofile
+*.cover.out
+*.prof
+*.prof.out
+
+# Editor-specific files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# IDE configuration files
+*.iml
+
+# Log files
+*.log
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Dependency management files
+# Uncomment the following lines if you use Go modules and you want to exclude `vendor` directory.
+# /vendor/
+
+# Gopkg files for dep
+Gopkg.lock
+Gopkg.toml
+
+# Modules download cache
+pkg/
+
+# Dependency management tool binaries
+bin/
