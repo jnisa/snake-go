@@ -49,8 +49,6 @@ Thumbs.db
 Gopkg.lock
 Gopkg.toml
 
-# Modules download cache
-pkg/
 
 # Dependency management tool binaries
 bin/

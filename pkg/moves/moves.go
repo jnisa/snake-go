@@ -2,7 +2,6 @@
 
 package src
 
-
 // // The documentation of this method needs to be adapted
 // func moveRight(){
 // 	/*

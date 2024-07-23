@@ -1,4 +1,6 @@
-// package main
+// TO BE DEFINED
+
+package main
 
 // import "fmt"
 
