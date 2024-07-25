@@ -2,8 +2,7 @@
 
 package src
 
-// // The documentation of this method needs to be adapted
-// func moveRight(){
+// func moveRight(snake [][]int) {
 // 	/*
 // 	 Turn the snake to the right
 

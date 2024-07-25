@@ -26,7 +26,7 @@ func Get(x, y int, board objects.Board) int {
 	return board.Cells[x][y]
 }
 
-func GetRandomPosition(snake [][]int, board objects.Board) (int, int) {
+func GetRandomPosition(snake objects.Snake, board objects.Board) (int, int) {
 	/*
 	 Get a random position in the board.
 
@@ -42,7 +42,7 @@ func GetRandomPosition(snake [][]int, board objects.Board) (int, int) {
 	x := rand.Intn(len(board.Cells))
 	y := rand.Intn(len(board.Cells[0]))
 
-	for _, pos := range snake {
+	for _, pos := range snake.Body {
 		if x == pos[0] && y == pos[1] {
 			return GetRandomPosition(snake, board)
 		}
