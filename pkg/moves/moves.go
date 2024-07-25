@@ -2,13 +2,14 @@
 
 package src
 
-// func moveRight(snake [][]int) {
+// func moveRight(snake objects.Snake) objects.Snake {
 // 	/*
 // 	 Turn the snake to the right
 
 // 	 :param snake: list of the snake's body
 // 	 :param direction: current direction of the snake
 // 	*/
+
 // }
 
 // func moveLeft(){

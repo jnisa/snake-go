@@ -18,8 +18,15 @@ func TestIsGameOverBasic(t *testing.T) {
 	*/
 
 	var test_board objects.Board
-	test_snake_limits := [][]int{{-1, 0}, {0, 0}, {1, 0}}
-	test_snake_bite := [][]int{{0, 0}, {0, 1}, {0, 0}}
+
+	test_snake_limits := objects.Snake{
+		Body:      [][]int{{-1, 0}, {0, 0}, {0, 1}},
+		Direction: objects.Left,
+	}
+	test_snake_bite := objects.Snake{
+		Body:      [][]int{{0, 0}, {0, 1}, {0, 0}},
+		Direction: objects.Down,
+	}
 
 	assert.True(t, states.IsGameOver(test_snake_limits, test_board))
 	assert.True(t, states.IsGameOver(test_snake_bite, test_board))
@@ -32,7 +39,10 @@ func TestIsGameOverAdvanced(t *testing.T) {
 	*/
 
 	var test_board objects.Board
-	test_snake := [][]int{{9, 10}, {10, 10}, {11, 10}}
+	test_snake := objects.Snake{
+		Body:      [][]int{{9, 10}, {10, 10}, {11, 10}},
+		Direction: objects.Left,
+	}
 
 	test_board.Cells[10][10] = 1
 
@@ -47,12 +57,17 @@ func TestIsIngestionBasic(t *testing.T) {
 	   2. the snake reaches a position where there's something that's not food.
 	*/
 
-	var test_board objects.Board
-	test_snake := [][]int{{9, 10}, {10, 10}, {11, 10}}
+	var test_board_food objects.Board
+	var test_board_no_food objects.Board
 
-	test_board.Cells[10][10] = 1
-	test_board.Cells[11][10] = 2
+	test_snake := objects.Snake{
+		Body:      [][]int{{9, 10}, {10, 10}, {11, 10}},
+		Direction: objects.Left,
+	}
 
-	assert.True(t, states.IsIngestion(test_snake, test_board))
-	assert.True(t, states.IsIngestion(test_snake, test_board))
+	test_board_food.Cells[9][10] = 1
+	test_board_no_food.Cells[11][10] = 2
+
+	assert.True(t, states.IsIngestion(test_snake, test_board_food))
+	assert.False(t, states.IsIngestion(test_snake, test_board_no_food))
 }

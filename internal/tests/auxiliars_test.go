@@ -31,7 +31,10 @@ func TestGetRandomPositionBasic(t *testing.T) {
 	 board is a 3x3 matrix.
 	*/
 
-	test_snake := [][]int{{1, 1}}
+	test_snake := objects.Snake{
+		Body:      [][]int{{1, 1}},
+		Direction: objects.Up,
+	}
 
 	var test_board objects.Board
 
@@ -46,7 +49,10 @@ func TestGetRandomPositionException(t *testing.T) {
 	 Test the GetRandomPosition function when the board is empty.
 	*/
 
-	test_snake := [][]int{}
+	test_snake := objects.Snake{
+		Body:      [][]int{},
+		Direction: objects.Up,
+	}
 	var test_board objects.Board
 
 	x, y := auxiliars.GetRandomPosition(test_snake, test_board)
