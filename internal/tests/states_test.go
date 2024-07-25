@@ -2,17 +2,24 @@
 
 package tests
 
-// func TestIsGameOverBasic(t *testing.T) {
-// 	/*
-// 	 Test the isGameOver function when the snake collides witht one of the walls.
-// 	*/
+import (
+	"testing"
 
-// 	test_snake := []int{0, 0}
-// 	// TODO. the best way to address this is probably to create an object with the board dimensions
-// 	// test_board := objects.Board{Cells: [24][32]int{}}
+	"github.com/jnisa/snake-go/pkg/objects"
+	"github.com/jnisa/snake-go/pkg/states"
+	"github.com/stretchr/testify/assert"
+)
 
-// 	assert.True(t, states.isGameOver(test_snake, test_board))
-// }
+func TestIsGameOverBasic(t *testing.T) {
+	/*
+	 Test the isGameOver function when the snake collides witht one of the walls.
+	*/
+
+	var test_board objects.Board
+	test_snake := [][]int{{-1, 0}, {0, 0}, {1, 0}}
+
+	assert.True(t, states.IsGameOver(test_snake, test_board))
+}
 
 // TODO. Uncommennt the following tests after knowing how to run tests
 // func TestIsGameOverAdvanced(t *testing.T) {

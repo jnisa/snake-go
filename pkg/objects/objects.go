@@ -5,7 +5,7 @@
 // 2. the snake will be represented by a list of coordinates
 // 3. a Position object should also be defined, suited to a bidimensional board
 
-package src
+package objects
 
 type Board struct {
 	Cells [24][32]int

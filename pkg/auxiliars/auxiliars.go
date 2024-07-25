@@ -5,9 +5,11 @@ package auxiliars
 
 import (
 	"math/rand"
+
+	"github.com/jnisa/snake-go/pkg/objects"
 )
 
-func Get(x, y int, board [][]int) int {
+func Get(x, y int, board objects.Board) int {
 	/*
 	 Get the value of the board at the given position.
 
@@ -17,14 +19,14 @@ func Get(x, y int, board [][]int) int {
 	 :return int: value of the board at the given position
 	*/
 
-	if x < 0 || x >= len(board) || y < 0 || y >= len(board[0]) {
+	if x < 0 || x >= len(board.Cells) || y < 0 || y >= len(board.Cells[0]) {
 		return -1
 	}
 
-	return board[x][y]
+	return board.Cells[x][y]
 }
 
-func GetRandomPosition(snake [][]int, board [][]int) (int, int) {
+func GetRandomPosition(snake [][]int, board objects.Board) (int, int) {
 	/*
 	 Get a random position in the board.
 
@@ -37,8 +39,8 @@ func GetRandomPosition(snake [][]int, board [][]int) (int, int) {
 	 :return (int, int): random position in the board
 	*/
 
-	x := rand.Intn(len(board))
-	y := rand.Intn(len(board[0]))
+	x := rand.Intn(len(board.Cells))
+	y := rand.Intn(len(board.Cells[0]))
 
 	for _, pos := range snake {
 		if x == pos[0] && y == pos[1] {

@@ -4,9 +4,10 @@ package states
 
 import (
 	"github.com/jnisa/snake-go/pkg/auxiliars"
+	"github.com/jnisa/snake-go/pkg/objects"
 )
 
-func isGameOver(snake [][]int, board [][]int) bool {
+func IsGameOver(snake [][]int, board objects.Board) bool {
 	/*
 	 Check if the game is over.
 
@@ -19,8 +20,7 @@ func isGameOver(snake [][]int, board [][]int) bool {
 	 :return: boolean indicating if the game is over
 	*/
 
-	// TODO. this function needs some more work before being tested
-	checkCollision := func(snake [][]int, board [][]int) bool {
+	checkCollision := func(snake [][]int, board objects.Board) bool {
 		/*
 		 Check if the snake collides with one of the walls.
 
@@ -29,15 +29,13 @@ func isGameOver(snake [][]int, board [][]int) bool {
 		 :return: boolean indicating if the snake collides with one of the walls
 		*/
 
-		// understand if the following code is right
-		if snake[0][0] < 0 || snake[0][0] >= len(board) || snake[0][1] < 0 || snake[0][1] >= len(board[0]) {
+		if snake[0][0] < 0 || snake[0][0] >= len(board.Cells) || snake[0][1] < 0 || snake[0][1] >= len(board.Cells[0]) {
 			return true
 		}
 
 		return false
 	}
 
-	// TODO. this function is ready to be tested
 	checkBiteItself := func(snake [][]int) bool {
 		/*
 		 Check if the snake collides with itself.
