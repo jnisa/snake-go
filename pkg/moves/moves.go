@@ -23,6 +23,8 @@ func MoveRight(snake objects.Snake) objects.Snake {
 	snake.Body = snake.Body[:len(snake.Body)-1]
 	snake.Body = append([][]int{{snakeHead[0] + 1, snakeHead[1]}}, snake.Body...)
 
+	snake.Direction = objects.Right
+
 	return snake
 }
 
@@ -42,6 +44,8 @@ func MoveLeft(snake objects.Snake) objects.Snake {
 
 	snake.Body = snake.Body[:len(snake.Body)-1]
 	snake.Body = append([][]int{{snakeHead[0] - 1, snakeHead[1]}}, snake.Body...)
+
+	snake.Direction = objects.Left
 
 	return snake
 }
@@ -63,6 +67,8 @@ func MoveUp(snake objects.Snake) objects.Snake {
 	snake.Body = snake.Body[:len(snake.Body)-1]
 	snake.Body = append([][]int{{snakeHead[0], snakeHead[1] + 1}}, snake.Body...)
 
+	snake.Direction = objects.Up
+
 	return snake
 }
 
@@ -82,6 +88,8 @@ func MoveDown(snake objects.Snake) objects.Snake {
 
 	snake.Body = snake.Body[:len(snake.Body)-1]
 	snake.Body = append([][]int{{snakeHead[0], snakeHead[1] - 1}}, snake.Body...)
+
+	snake.Direction = objects.Down
 
 	return snake
 }

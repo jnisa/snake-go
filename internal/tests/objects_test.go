@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// evaluate if this test shouldn't be splitted into two different tests
+// TODO. split this test into to two different tests
 func TestUpdateSnakeBasic(t *testing.T) {
 	/*
 	 Test the UpdateSnake function when:

@@ -17,17 +17,16 @@ func TestMoveRight(t *testing.T) {
 
 	test_snake := objects.Snake{
 		Body:      [][]int{{0, 0}, {0, 1}, {0, 2}},
-		Direction: objects.Right,
+		Direction: objects.Down,
 	}
 
-	test_snake = moves.MoveRight(test_snake)
-
+	actual_snake := moves.MoveRight(test_snake)
 	expected_snake := objects.Snake{
 		Body:      [][]int{{1, 0}, {0, 0}, {0, 1}},
 		Direction: objects.Right,
 	}
 
-	assert.Equal(t, expected_snake, test_snake)
+	assert.Equal(t, expected_snake, actual_snake)
 }
 
 func TestMoveLeft(t *testing.T) {
@@ -37,17 +36,16 @@ func TestMoveLeft(t *testing.T) {
 
 	test_snake := objects.Snake{
 		Body:      [][]int{{0, 0}, {0, 1}, {0, 2}},
-		Direction: objects.Right,
+		Direction: objects.Down,
 	}
 
-	test_snake = moves.MoveLeft(test_snake)
-
+	actual_snake := moves.MoveLeft(test_snake)
 	expected_snake := objects.Snake{
 		Body:      [][]int{{-1, 0}, {0, 0}, {0, 1}},
-		Direction: objects.Right,
+		Direction: objects.Left,
 	}
 
-	assert.Equal(t, expected_snake, test_snake)
+	assert.Equal(t, expected_snake, actual_snake)
 }
 
 func TestMoveUp(t *testing.T) {
@@ -56,18 +54,17 @@ func TestMoveUp(t *testing.T) {
 	*/
 
 	test_snake := objects.Snake{
-		Body:      [][]int{{0, 2}, {0, 1}, {0, 0}},
-		Direction: objects.Right,
+		Body:      [][]int{{15, 10}, {16, 10}, {17, 10}},
+		Direction: objects.Left,
 	}
 
-	test_snake = moves.MoveUp(test_snake)
-
+	actual_snake := moves.MoveUp(test_snake)
 	expected_snake := objects.Snake{
-		Body:      [][]int{{0, 3}, {0, 2}, {0, 1}},
-		Direction: objects.Right,
+		Body:      [][]int{{15, 11}, {15, 10}, {16, 10}},
+		Direction: objects.Up,
 	}
 
-	assert.Equal(t, expected_snake, test_snake)
+	assert.Equal(t, expected_snake, actual_snake)
 }
 
 func TestMoveDown(t *testing.T) {
@@ -80,12 +77,11 @@ func TestMoveDown(t *testing.T) {
 		Direction: objects.Right,
 	}
 
-	test_snake = moves.MoveDown(test_snake)
-
+	actual_snake := moves.MoveDown(test_snake)
 	expected_snake := objects.Snake{
 		Body:      [][]int{{0, -1}, {0, 0}, {0, 1}},
-		Direction: objects.Right,
+		Direction: objects.Down,
 	}
 
-	assert.Equal(t, expected_snake, test_snake)
+	assert.Equal(t, expected_snake, actual_snake)
 }
