@@ -20,9 +20,10 @@ type Snake struct {
 	Body      [][]int
 }
 
+// TODO. not sure if this function should be reallocated to the moves.go script
 func UpdateSnake(snake Snake) Snake {
 	/*
-		Add a new coordinate to the snake's body.
+		Add a new coordinate to the snake's body when no movement is detected.
 
 		Adding a new coordinate to the snake's body will be higly dependent on the
 		current direction of the snake. The new coordinate will be added to the

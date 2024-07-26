@@ -1,39 +1,87 @@
 // Script containing all the movements allowed in the game
 
-package src
+package moves
 
-// func moveRight(snake objects.Snake) objects.Snake {
-// 	/*
-// 	 Turn the snake to the right
+import (
+	"github.com/jnisa/snake-go/pkg/objects"
+)
 
-// 	 :param snake: list of the snake's body
-// 	 :param direction: current direction of the snake
-// 	*/
+func MoveRight(snake objects.Snake) objects.Snake {
+	/*
+	 Turn the snake to the right.
 
-// }
+	 In order to accomplish this movement, the following steps should be taken:
+	   1. remove the last position of the snake;
+	   2. add a new position to the right of the first position of the snake.
 
-// func moveLeft(){
-// 	/*
-// 	 Turn the snake to the left
+	 :param snake: list of the snake's body
+	 :return: the snake updated when moving to the right
+	*/
 
-// 	 :param snake: list of the snake's body
-// 	 :param direction: current direction of the snake
-// 	*/
-// }
+	snakeHead := snake.Body[0]
 
-// func moveUp(){
-// 	/*
-// 	 Turn the snake up
+	snake.Body = snake.Body[:len(snake.Body)-1]
+	snake.Body = append([][]int{{snakeHead[0] + 1, snakeHead[1]}}, snake.Body...)
 
-// 	 :param snake: list of the snake's body
-// 	 :param direction: current direction of the snake
-// 	*/
-// }
+	return snake
+}
 
-// func moveDown(){
-// 	/*
-// 	 Turn the snake down
+func MoveLeft(snake objects.Snake) objects.Snake {
+	/*
+	 Turn the snake to the left.
 
-// 	 :param
-// 	*/
-// }
+	 In order to accomplish this movement, the following steps should be taken:
+	   1. remove the last position of the snake;
+	   2. add a new position to the left of the first position of the snake.
+
+	 :param snake: list of the snake's body
+	 :return: the snake updated when moving to the left
+	*/
+
+	snakeHead := snake.Body[0]
+
+	snake.Body = snake.Body[:len(snake.Body)-1]
+	snake.Body = append([][]int{{snakeHead[0] - 1, snakeHead[1]}}, snake.Body...)
+
+	return snake
+}
+
+func MoveUp(snake objects.Snake) objects.Snake {
+	/*
+	 Turn the snake up.
+
+	 In order to accomplish this movement, the following steps should be taken:
+	   1. remove the last position of the snake;
+	   2. add a new position above the first position of the snake.
+
+	 :param snake: list of the snake's body
+	 :return: the snake updated when moving up
+	*/
+
+	snakeHead := snake.Body[0]
+
+	snake.Body = snake.Body[:len(snake.Body)-1]
+	snake.Body = append([][]int{{snakeHead[0], snakeHead[1] + 1}}, snake.Body...)
+
+	return snake
+}
+
+func MoveDown(snake objects.Snake) objects.Snake {
+	/*
+	 Turn the snake down.
+
+	 In order to accomplish this movement, the following steps should be taken:
+	   1. remove the last position of the snake;
+	   2. add a new position below the first position of the snake.
+
+	 :param snake: list of the snake's body
+	 :return: the snake updated when moving down
+	*/
+
+	snakeHead := snake.Body[0]
+
+	snake.Body = snake.Body[:len(snake.Body)-1]
+	snake.Body = append([][]int{{snakeHead[0], snakeHead[1] - 1}}, snake.Body...)
+
+	return snake
+}
