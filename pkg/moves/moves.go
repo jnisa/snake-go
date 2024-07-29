@@ -6,6 +6,9 @@ import (
 	"github.com/jnisa/snake-go/pkg/objects"
 )
 
+// TODO. there's a function missing that needs to get the value of a the keyboard
+// when one of the arrows is pressed
+
 func MoveRight(snake objects.Snake) objects.Snake {
 	/*
 	 Turn the snake to the right.

@@ -54,13 +54,16 @@ func IsGameOver(snake objects.Snake, board objects.Board) bool {
 	return checkCollision(snake, board) || checkBiteItself(snake)
 }
 
+// TODO. this function might need to be converted into a nested method
+// that not only detects if there's an ingestion but also updates the
 func IsIngestion(snake objects.Snake, board objects.Board) bool {
 	/*
 	 Check if the snake has reached a position where there's food.
 
 	 :param snake: list of the snake's body
 	 :param board: matrix representing the board
-	 :return: boolean indicating if the snake has reached a position where there's food
+	 :return: boolean indicating if the snake has reached a position where
+	 there's food
 	*/
 
 	return board.Cells[snake.Body[0][0]][snake.Body[0][1]] == 1
