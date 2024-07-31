@@ -15,6 +15,8 @@ type Board struct {
 	Cells [24][32]int
 }
 
+// TODO. the snake should also contained the points - that essentially would be the
+// length of the snake
 type Snake struct {
 	Direction Direction
 	Body      [][]int
