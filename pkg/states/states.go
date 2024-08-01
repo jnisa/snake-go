@@ -54,18 +54,63 @@ func IsGameOver(snake objects.Snake, board objects.Board) bool {
 	return checkCollision(snake, board) || checkBiteItself(snake)
 }
 
-// TODO. this function might need to be converted into a nested method
-// that not only detects if there's an ingestion but also updates the
-// snake's body
-func IsIngestion(snake objects.Snake, board objects.Board) bool {
+func SnakeIngestionUpdate(snake objects.Snake, board objects.Board) objects.Snake {
 	/*
-	 Check if the snake has reached a position where there's food.
+	 If there's an ingestion of food, update the snake's body.
 
 	 :param snake: list of the snake's body
 	 :param board: matrix representing the board
-	 :return: boolean indicating if the snake has reached a position where
-	 there's food
+	 :return: the snake updated with a new tile in the body
 	*/
 
-	return board.Cells[snake.Body[0][0]][snake.Body[0][1]] == 1
+	isIngestion := func(snake objects.Snake, board objects.Board) bool {
+		/*
+			Check if the snake has reached a position where there's food.
+
+			:param snake: list of the snake's body
+			:param board: matrix representing the board
+			:return: boolean indicating if the snake has reached a position where
+			there's food
+		*/
+
+		return board.Cells[snake.Body[0][0]][snake.Body[0][1]] == 1
+	}
+
+	addNewTile := func(snake objects.Snake) objects.Snake {
+		/*
+		 Add a new tile to the snake's body.
+
+		 The new tile will be added to the end of the snake's body. This is done
+		 by getting the first tile of the snake's body and adding a new tile to
+		 the first position of the snake's body.
+
+		 To make that happen, the Direction of the snake must be taken into account.
+
+		 :param snake: list of the snake's body
+		 :return: the snake updated with a new tile in the body
+		*/
+
+		snakeHead := snake.Body[0]
+		snakeDirection := snake.Direction
+		snake.Score += 1
+
+		switch snakeDirection {
+		case objects.Up:
+			snake.Body = append([][]int{{snakeHead[0], snakeHead[1] + 1}}, snake.Body...)
+		case objects.Down:
+			snake.Body = append([][]int{{snakeHead[0], snakeHead[1] - 1}}, snake.Body...)
+		case objects.Left:
+			snake.Body = append([][]int{{snakeHead[0] - 1, snakeHead[1]}}, snake.Body...)
+		case objects.Right:
+			snake.Body = append([][]int{{snakeHead[0] + 1, snakeHead[1]}}, snake.Body...)
+		}
+
+		return snake
+	}
+
+	if isIngestion(snake, board) {
+		snake = addNewTile(snake)
+	}
+
+	return snake
 }

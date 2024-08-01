@@ -6,8 +6,45 @@ import (
 	"github.com/jnisa/snake-go/pkg/objects"
 )
 
-// TODO. there's a function missing that needs to get the value of a the keyboard
-// when one of the arrows is pressed
+func UpdateSnake(snake objects.Snake) objects.Snake {
+	/*
+	 Add a new coordinate to the snake's body when no movement is detected.
+
+	 Adding a new coordinate to the snake's body will be higly dependent on the
+	 current direction of the snake. The new coordinate will be added to the
+	 beginning of the snake's body.
+
+	 I.e.
+	 - If the snake is moving up, the new coordinate will be the one above the
+	 first body cell;
+	 - If the snake is moving down, the new coordinate will be the one below the
+	 first body cell;
+	 - If the snake is moving left, the new coordinate will be the one to the left
+	 of the first body cell;
+	 - If the snake is moving right, the new coordinate will be the one to the right
+	 of the first body cell.
+
+	 :param snake: list of the snake's body
+	 :return: the snake updated
+	*/
+
+	var newCoordinate [][]int
+
+	switch snake.Direction {
+	case objects.Up:
+		newCoordinate = [][]int{{snake.Body[0][0], snake.Body[0][1] - 1}}
+	case objects.Down:
+		newCoordinate = [][]int{{snake.Body[0][0], snake.Body[0][1] + 1}}
+	case objects.Left:
+		newCoordinate = [][]int{{snake.Body[0][0] - 1, snake.Body[0][1]}}
+	case objects.Right:
+		newCoordinate = [][]int{{snake.Body[0][0] + 1, snake.Body[0][1]}}
+	}
+
+	snake.Body = append(newCoordinate, snake.Body...)
+
+	return snake
+}
 
 func MoveRight(snake objects.Snake) objects.Snake {
 	/*

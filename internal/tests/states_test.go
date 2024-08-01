@@ -50,24 +50,30 @@ func TestIsGameOverAdvanced(t *testing.T) {
 
 }
 
-func TestIsIngestionBasic(t *testing.T) {
+// TODO. check if the documentation needs to be updated afterwards
+// TODO. add more tests later
+func TestSnakeIngestionUpdate_Up(t *testing.T) {
 	/*
-	 Test the isIngestion function when:
-	   1. the snake reaches a position where there's food;
-	   2. the snake reaches a position where there's something that's not food.
+	 Test the SnakeIngestionUpdate function - when the snake is moving up.
 	*/
 
-	var test_board_food objects.Board
-	var test_board_no_food objects.Board
+	var test_board objects.Board
 
 	test_snake := objects.Snake{
-		Body:      [][]int{{9, 10}, {10, 10}, {11, 10}},
-		Direction: objects.Left,
+		Body:      [][]int{{10, 11}, {10, 10}, {10, 9}},
+		Direction: objects.Up,
+		Score:     0,
 	}
 
-	test_board_food.Cells[9][10] = 1
-	test_board_no_food.Cells[11][10] = 2
+	// add food to the board
+	test_board.Cells[10][11] = 1
 
-	assert.True(t, states.IsIngestion(test_snake, test_board_food))
-	assert.False(t, states.IsIngestion(test_snake, test_board_no_food))
+	actual := states.SnakeIngestionUpdate(test_snake, test_board)
+	expected := objects.Snake{
+		Body:      [][]int{{10, 12}, {10, 11}, {10, 10}, {10, 9}},
+		Direction: objects.Up,
+		Score:     1,
+	}
+
+	assert.Equal(t, expected, actual)
 }

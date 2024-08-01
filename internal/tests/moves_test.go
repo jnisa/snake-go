@@ -10,6 +10,39 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+// TODO. split this tests into multiple tests
+func TestUpdateSnakeBasic(t *testing.T) {
+	/*
+	 Test the UpdateSnake function when:
+	   1. the snake is moving to the right;
+	   2. the snake is moving to the up;
+	*/
+
+	test_snake_vertical := objects.Snake{
+		Body:      [][]int{{0, 1}, {0, 2}, {0, 3}},
+		Direction: objects.Up,
+	}
+	test_snake_horizontal := objects.Snake{
+		Body:      [][]int{{4, 3}, {3, 3}, {3, 2}},
+		Direction: objects.Right,
+	}
+
+	actual_snake_vertical := moves.UpdateSnake(test_snake_vertical)
+	actual_snake_horizontal := moves.UpdateSnake(test_snake_horizontal)
+
+	expected_snake_vertical := objects.Snake{
+		Body:      [][]int{{0, 0}, {0, 1}, {0, 2}, {0, 3}},
+		Direction: objects.Up,
+	}
+	expected_snake_horizontal := objects.Snake{
+		Body:      [][]int{{5, 3}, {4, 3}, {3, 3}, {3, 2}},
+		Direction: objects.Right,
+	}
+
+	assert.Equal(t, expected_snake_vertical, actual_snake_vertical)
+	assert.Equal(t, expected_snake_horizontal, actual_snake_horizontal)
+}
+
 func TestMoveRight_basic(t *testing.T) {
 	/*
 	 Test the MoveRight function when the snake is moving Down.
