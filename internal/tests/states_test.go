@@ -68,12 +68,16 @@ func TestSnakeIngestionUpdate_Up(t *testing.T) {
 	// add food to the board
 	test_board.Cells[10][11] = 1
 
-	actual := states.SnakeIngestionUpdate(test_snake, test_board)
-	expected := objects.Snake{
+	actual_snake, actual_board := states.SnakeIngestionUpdate(test_snake, test_board)
+	expected_snake := objects.Snake{
 		Body:      [][]int{{10, 12}, {10, 11}, {10, 10}, {10, 9}},
 		Direction: objects.Up,
 		Score:     1,
 	}
+	expected_board := objects.Board{
+		Cells: [32][32]int{},
+	}
 
-	assert.Equal(t, expected, actual)
+	assert.Equal(t, expected_snake, actual_snake)
+	assert.Equal(t, expected_board, actual_board)
 }

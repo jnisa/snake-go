@@ -62,6 +62,7 @@ func GetSnakeMove(inputReader InputReader) string {
 
 	for {
 		ev := inputReader.PollEvent()
+		fmt.Println("Received event: ", ev)
 
 		switch ev.Key {
 		case moves.Up:
@@ -74,6 +75,8 @@ func GetSnakeMove(inputReader InputReader) string {
 			return "right"
 		case moves.Esc:
 			return "quit"
+		default:
+			return ""
 		}
 	}
 }

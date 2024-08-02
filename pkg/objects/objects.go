@@ -12,7 +12,7 @@ const (
 )
 
 type Board struct {
-	Cells [24][32]int
+	Cells [32][32]int
 }
 
 type Snake struct {

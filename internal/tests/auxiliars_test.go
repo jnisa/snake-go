@@ -88,3 +88,21 @@ func TestRemoveDuplicatesException(t *testing.T) {
 
 	assert.Equal(t, actual, expected)
 }
+
+func TestContainsValue(t *testing.T) {
+	/*
+	 Check if the ContainsValue function performs in two cases:
+	  1. when there's a value in the nested list;
+	  2. when there's not a value in the nested list;
+	  3. when the nested list is empty.
+	*/
+
+	var non_empty_board objects.Board
+	var empty_board objects.Board
+
+	non_empty_board.Cells[0][0] = 1
+
+	assert.True(t, auxiliars.BoardContainsValue(1, non_empty_board))
+	assert.False(t, auxiliars.BoardContainsValue(2, non_empty_board))
+	assert.False(t, auxiliars.BoardContainsValue(1, empty_board))
+}

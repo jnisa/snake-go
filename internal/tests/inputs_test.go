@@ -43,7 +43,8 @@ func TestDefineMoveOptions(t *testing.T) {
 
 func TestGetSnakeMove(t *testing.T) {
 	/*
-	 Test if the GetSnakeMove is able to capture all the possible moves.
+	 Test if the GetSnakeMove is able to capture all the possible moves including when no key
+	 is pressed.
 	*/
 
 	test_set := []struct {
@@ -56,10 +57,11 @@ func TestGetSnakeMove(t *testing.T) {
 		{"test - move left", []termbox.Event{{Key: termbox.KeyArrowLeft}}, "left"},
 		{"test - move right", []termbox.Event{{Key: termbox.KeyArrowRight}}, "right"},
 		{"test - escape", []termbox.Event{{Key: termbox.KeyEsc}}, "quit"},
+		{"test - no key pressed", []termbox.Event{{Key: termbox.Key(termbox.EventNone)}}, ""},
 	}
 
 	actual := []string{}
-	expected := []string{"up", "down", "left", "right", "quit"}
+	expected := []string{"up", "down", "left", "right", "quit", ""}
 
 	for _, test := range test_set {
 		t.Run(test.name, func(t *testing.T) {
@@ -68,6 +70,5 @@ func TestGetSnakeMove(t *testing.T) {
 		})
 	}
 
-	assert.Equal(t, actual, expected)
-
+	assert.Equal(t, expected, actual)
 }

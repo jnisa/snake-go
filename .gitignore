@@ -52,3 +52,6 @@ Gopkg.toml
 
 # Dependency management tool binaries
 bin/
+
+# Debugging scripts
+*/__debug*

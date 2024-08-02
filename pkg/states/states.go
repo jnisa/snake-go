@@ -54,7 +54,7 @@ func IsGameOver(snake objects.Snake, board objects.Board) bool {
 	return checkCollision(snake, board) || checkBiteItself(snake)
 }
 
-func SnakeIngestionUpdate(snake objects.Snake, board objects.Board) objects.Snake {
+func SnakeIngestionUpdate(snake objects.Snake, board objects.Board) (objects.Snake, objects.Board) {
 	/*
 	 If there's an ingestion of food, update the snake's body.
 
@@ -108,9 +108,12 @@ func SnakeIngestionUpdate(snake objects.Snake, board objects.Board) objects.Snak
 		return snake
 	}
 
+	// if there's an ingestion then we need to set the eaten tile to 0
+	// and add a new tile to the snake's body
 	if isIngestion(snake, board) {
+		board.Cells[snake.Body[0][0]][snake.Body[0][1]] = 0
 		snake = addNewTile(snake)
 	}
 
-	return snake
+	return snake, board
 }
