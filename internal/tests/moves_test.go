@@ -31,11 +31,11 @@ func TestUpdateSnakeBasic(t *testing.T) {
 	moves.UpdateSnake(&actual_snake_horizontal)
 
 	expected_snake_vertical := objects.Snake{
-		Body:      [][]int{{0, 0}, {0, 1}, {0, 2}, {0, 3}},
+		Body:      [][]int{{0, 0}, {0, 1}, {0, 2}},
 		Direction: objects.Up,
 	}
 	expected_snake_horizontal := objects.Snake{
-		Body:      [][]int{{5, 3}, {4, 3}, {3, 3}, {3, 2}},
+		Body:      [][]int{{5, 3}, {4, 3}, {3, 3}},
 		Direction: objects.Right,
 	}
 

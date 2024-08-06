@@ -26,6 +26,7 @@ import (
 )
 
 // TODO. check if these dimensions are ok
+// TODO. there must be a disalignment the board array and the dimensions of the screen
 const (
 	ScreenWidth  = 1000
 	ScreenHeight = 1000
@@ -68,14 +69,15 @@ func (g *Game) Update() error {
 			moves.MoveDown(&g.snake)
 		case inpututil.IsKeyJustPressed(ebiten.KeyEscape):
 			fmt.Println("Quitting the game...")
+			return fmt.Errorf("the user has quit the game")
+
+		// TODO. not sure if this should stay out of the switch
 		case states.IsGameOver(g.snake, g.board):
-			// TODO. create a soft game over page instead of this abrupt shutdown message
 			return fmt.Errorf("Game Over")
 		default:
 			moves.UpdateSnake(&g.snake)
 		}
 
-		// Update the last update time
 		g.lastUpdate = now
 	}
 

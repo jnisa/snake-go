@@ -42,6 +42,7 @@ func UpdateSnake(snake *objects.Snake) {
 	}
 
 	snake.Body = append(newCoordinate, snake.Body...)
+	snake.Body = snake.Body[:len(snake.Body)-1]
 }
 
 func MoveRight(snake *objects.Snake) {
