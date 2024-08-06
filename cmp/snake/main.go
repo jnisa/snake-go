@@ -1,30 +1,43 @@
 // Script containing all the functions affecting the dynamics of the game
 
+//////////////////////////////////////////////////////////////////////////
+// --TODO--
+// There's a few things to do on this script:
+// 1. Add a description to the functions
+// 2. Reallocate some of the functions into a game dedicated script
+// 3. Add a few more functions to the game script
+// 4. Add a clock to the game
+//////////////////////////////////////////////////////////////////////////
+
 package main
 
 import (
 	"fmt"
 	"image/color"
+	"time"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
+	"github.com/jnisa/snake-go/pkg/auxiliars"
 	"github.com/jnisa/snake-go/pkg/moves"
 	"github.com/jnisa/snake-go/pkg/objects"
+	"github.com/jnisa/snake-go/pkg/states"
 )
 
 // TODO. check if these dimensions are ok
 const (
-	ScreenWidth  = 480
-	ScreenHeight = 480
-	BoardHeight  = 20
-	boardWidth   = 20
+	ScreenWidth  = 1000
+	ScreenHeight = 1000
+	BoardHeight  = 100
+	boardWidth   = 100
 	CellSize     = 20
 )
 
 type Game struct {
-	board objects.Board
-	snake objects.Snake
+	board      objects.Board
+	snake      objects.Snake
+	lastUpdate time.Time
 	// boardImage *ebiten.Image
 }
 
@@ -36,32 +49,35 @@ func (g *Game) Update() error {
 	 :param g: current game state
 	*/
 
-	if ebiten.IsKeyPressed(ebiten.KeyArrowLeft) {
-		moves.MoveLeft(g.snake)
-		fmt.Println("Left arrow pressed!")
-	}
-	if ebiten.IsKeyPressed(ebiten.KeyArrowRight) {
-		//////////////////////////////////////////////////////////
-		// TODO. this function can be changed to work with a pointers
-		//////////////////////////////////////////////////////////
-		moves.MoveRight(g.snake)
-		fmt.Println("Right arrow pressed!")
-	}
-	if ebiten.IsKeyPressed(ebiten.KeyArrowUp) {
-		moves.MoveUp(g.snake)
-		fmt.Println("Up arrow pressed!")
-	}
-	if ebiten.IsKeyPressed(ebiten.KeyArrowDown) {
-		moves.MoveDown(g.snake)
-		fmt.Println("Down arrow pressed!")
-	}
-	if inpututil.IsKeyJustPressed(ebiten.KeyEscape) {
-		fmt.Println("Quitting the game...")
+	now := time.Now()
 
-	}
+	if now.Sub(g.lastUpdate) >= time.Second {
 
-	// TODO. if no key is pressed then update the board with the last Direction
-	// TODO. not sure if other functions should be added here as well (e.g. IsGameOver, etc...)
+		switch {
+		case ebiten.IsKeyPressed(ebiten.KeyArrowLeft):
+			fmt.Println("Left arrow pressed!")
+			moves.MoveLeft(&g.snake)
+		case ebiten.IsKeyPressed(ebiten.KeyArrowRight):
+			fmt.Println("Right arrow pressed!")
+			moves.MoveRight(&g.snake)
+		case ebiten.IsKeyPressed(ebiten.KeyArrowUp):
+			fmt.Println("Up arrow pressed!")
+			moves.MoveUp(&g.snake)
+		case ebiten.IsKeyPressed(ebiten.KeyArrowDown):
+			fmt.Println("Down arrow pressed!")
+			moves.MoveDown(&g.snake)
+		case inpututil.IsKeyJustPressed(ebiten.KeyEscape):
+			fmt.Println("Quitting the game...")
+		case states.IsGameOver(g.snake, g.board):
+			// TODO. create a soft game over page instead of this abrupt shutdown message
+			return fmt.Errorf("Game Over")
+		default:
+			moves.UpdateSnake(&g.snake)
+		}
+
+		// Update the last update time
+		g.lastUpdate = now
+	}
 
 	return nil
 }
@@ -78,6 +94,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 
 	g.DrawBoard(screen)
 	g.DrawSnake(screen)
+	g.DrawFood(screen)
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
@@ -107,7 +124,7 @@ func (g *Game) DrawBoard(screen *ebiten.Image) {
 				float64(y*CellSize),
 				float64(CellSize),
 				float64(CellSize),
-				color.RGBA{0, 255, 0, 255},
+				color.RGBA{116, 116, 116, 0},
 			)
 		}
 	}
@@ -129,6 +146,26 @@ func (g *Game) DrawSnake(screen *ebiten.Image) {
 			CellSize,
 			CellSize,
 			color.RGBA{255, 0, 0, 255},
+		)
+	}
+}
+
+func (g *Game) DrawFood(screen *ebiten.Image) {
+	/*
+	 Render the food on the front-end.
+
+	 :param screen: ADD A DESCRIPTION HERE...
+	*/
+
+	if auxiliars.BoardContainsValue(1, g.board) {
+		x, y := auxiliars.GetRandomPosition(g.snake, g.board)
+		ebitenutil.DrawRect(
+			screen,
+			float64(x),
+			float64(y),
+			CellSize,
+			CellSize,
+			color.RGBA{183, 185, 5, 0},
 		)
 	}
 }

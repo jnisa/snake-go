@@ -18,17 +18,17 @@ func TestUpdateSnakeBasic(t *testing.T) {
 	   2. the snake is moving to the up;
 	*/
 
-	test_snake_vertical := objects.Snake{
+	actual_snake_vertical := objects.Snake{
 		Body:      [][]int{{0, 1}, {0, 2}, {0, 3}},
 		Direction: objects.Up,
 	}
-	test_snake_horizontal := objects.Snake{
+	actual_snake_horizontal := objects.Snake{
 		Body:      [][]int{{4, 3}, {3, 3}, {3, 2}},
 		Direction: objects.Right,
 	}
 
-	actual_snake_vertical := moves.UpdateSnake(test_snake_vertical)
-	actual_snake_horizontal := moves.UpdateSnake(test_snake_horizontal)
+	moves.UpdateSnake(&actual_snake_vertical)
+	moves.UpdateSnake(&actual_snake_horizontal)
 
 	expected_snake_vertical := objects.Snake{
 		Body:      [][]int{{0, 0}, {0, 1}, {0, 2}, {0, 3}},
@@ -48,12 +48,12 @@ func TestMoveRight_basic(t *testing.T) {
 	 Test the MoveRight function when the snake is moving Down.
 	*/
 
-	test_snake := objects.Snake{
+	actual_snake := objects.Snake{
 		Body:      [][]int{{0, 0}, {0, 1}, {0, 2}},
 		Direction: objects.Down,
 	}
 
-	actual_snake := moves.MoveRight(test_snake)
+	moves.MoveRight(&actual_snake)
 	expected_snake := objects.Snake{
 		Body:      [][]int{{1, 0}, {0, 0}, {0, 1}},
 		Direction: objects.Right,
@@ -67,12 +67,12 @@ func TestMoveRight_exception(t *testing.T) {
 	 Test the MoveRight function when the snake is moving to the left.
 	*/
 
-	test_snake := objects.Snake{
+	actual_snake := objects.Snake{
 		Body:      [][]int{{0, 0}, {0, 1}, {0, 2}},
 		Direction: objects.Left,
 	}
 
-	actual_snake := moves.MoveRight(test_snake)
+	moves.MoveRight(&actual_snake)
 	expected_snake := objects.Snake{
 		Body:      [][]int{{0, 0}, {0, 1}, {0, 2}},
 		Direction: objects.Left,
@@ -86,12 +86,12 @@ func TestMoveLeft_basic(t *testing.T) {
 	 Test the MoveLeft function when the snake is moving Down.
 	*/
 
-	test_snake := objects.Snake{
+	actual_snake := objects.Snake{
 		Body:      [][]int{{0, 0}, {0, 1}, {0, 2}},
 		Direction: objects.Down,
 	}
 
-	actual_snake := moves.MoveLeft(test_snake)
+	moves.MoveLeft(&actual_snake)
 	expected_snake := objects.Snake{
 		Body:      [][]int{{-1, 0}, {0, 0}, {0, 1}},
 		Direction: objects.Left,
@@ -105,12 +105,12 @@ func TestMoveLeft_exception(t *testing.T) {
 	 Test the MoveLeft function when the snake is moving to the right.
 	*/
 
-	test_snake := objects.Snake{
+	actual_snake := objects.Snake{
 		Body:      [][]int{{0, 0}, {0, 1}, {0, 2}},
 		Direction: objects.Right,
 	}
 
-	actual_snake := moves.MoveLeft(test_snake)
+	moves.MoveLeft(&actual_snake)
 	expected_snake := objects.Snake{
 		Body:      [][]int{{0, 0}, {0, 1}, {0, 2}},
 		Direction: objects.Right,
@@ -124,14 +124,14 @@ func TestMoveUp_basic(t *testing.T) {
 	 Test the MoveUp function when the snake is moving Left.
 	*/
 
-	test_snake := objects.Snake{
+	actual_snake := objects.Snake{
 		Body:      [][]int{{15, 10}, {16, 10}, {17, 10}},
 		Direction: objects.Left,
 	}
 
-	actual_snake := moves.MoveUp(test_snake)
+	moves.MoveUp(&actual_snake)
 	expected_snake := objects.Snake{
-		Body:      [][]int{{15, 11}, {15, 10}, {16, 10}},
+		Body:      [][]int{{15, 9}, {15, 10}, {16, 10}},
 		Direction: objects.Up,
 	}
 
@@ -143,12 +143,12 @@ func TestMoveUp_exception(t *testing.T) {
 	 Test the MoveUp function when the snake is moving down.
 	*/
 
-	test_snake := objects.Snake{
+	actual_snake := objects.Snake{
 		Body:      [][]int{{0, 0}, {0, 1}, {0, 2}},
 		Direction: objects.Down,
 	}
 
-	actual_snake := moves.MoveUp(test_snake)
+	moves.MoveUp(&actual_snake)
 	expected_snake := objects.Snake{
 		Body:      [][]int{{0, 0}, {0, 1}, {0, 2}},
 		Direction: objects.Down,
@@ -162,14 +162,14 @@ func TestMoveDown_basic(t *testing.T) {
 	 Test the MoveDown function when the snake is moving to the right.
 	*/
 
-	test_snake := objects.Snake{
-		Body:      [][]int{{0, 0}, {0, 1}, {0, 2}},
-		Direction: objects.Right,
+	actual_snake := objects.Snake{
+		Body:      [][]int{{1, 0}, {2, 0}, {3, 0}},
+		Direction: objects.Left,
 	}
 
-	actual_snake := moves.MoveDown(test_snake)
+	moves.MoveDown(&actual_snake)
 	expected_snake := objects.Snake{
-		Body:      [][]int{{0, -1}, {0, 0}, {0, 1}},
+		Body:      [][]int{{1, 1}, {1, 0}, {2, 0}},
 		Direction: objects.Down,
 	}
 
@@ -181,12 +181,12 @@ func TestMoveDown_exception(t *testing.T) {
 	 Test the MoveDown function when the snake is moving Up.
 	*/
 
-	test_snake := objects.Snake{
+	actual_snake := objects.Snake{
 		Body:      [][]int{{0, 0}, {0, 1}, {0, 2}},
 		Direction: objects.Up,
 	}
 
-	actual_snake := moves.MoveDown(test_snake)
+	moves.MoveDown(&actual_snake)
 	expected_snake := objects.Snake{
 		Body:      [][]int{{0, 0}, {0, 1}, {0, 2}},
 		Direction: objects.Up,

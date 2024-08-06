@@ -54,6 +54,7 @@ func IsGameOver(snake objects.Snake, board objects.Board) bool {
 	return checkCollision(snake, board) || checkBiteItself(snake)
 }
 
+// TODO. this function needs to be adapted - we should use pointers here instead of this
 func SnakeIngestionUpdate(snake objects.Snake, board objects.Board) (objects.Snake, objects.Board) {
 	/*
 	 If there's an ingestion of food, update the snake's body.

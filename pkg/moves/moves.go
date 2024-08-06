@@ -6,7 +6,7 @@ import (
 	"github.com/jnisa/snake-go/pkg/objects"
 )
 
-func UpdateSnake(snake objects.Snake) objects.Snake {
+func UpdateSnake(snake *objects.Snake) {
 	/*
 	 Add a new coordinate to the snake's body when no movement is detected.
 
@@ -42,11 +42,9 @@ func UpdateSnake(snake objects.Snake) objects.Snake {
 	}
 
 	snake.Body = append(newCoordinate, snake.Body...)
-
-	return snake
 }
 
-func MoveRight(snake objects.Snake) objects.Snake {
+func MoveRight(snake *objects.Snake) {
 	/*
 	 Turn the snake to the right.
 
@@ -72,11 +70,9 @@ func MoveRight(snake objects.Snake) objects.Snake {
 		snake.Direction = objects.Right
 
 	}
-
-	return snake
 }
 
-func MoveLeft(snake objects.Snake) objects.Snake {
+func MoveLeft(snake *objects.Snake) {
 	/*
 	 Turn the snake to the left.
 
@@ -102,11 +98,9 @@ func MoveLeft(snake objects.Snake) objects.Snake {
 		snake.Direction = objects.Left
 
 	}
-
-	return snake
 }
 
-func MoveUp(snake objects.Snake) objects.Snake {
+func MoveUp(snake *objects.Snake) {
 	/*
 	 Turn the snake up.
 
@@ -127,16 +121,14 @@ func MoveUp(snake objects.Snake) objects.Snake {
 		snakeHead := snake.Body[0]
 
 		snake.Body = snake.Body[:len(snake.Body)-1]
-		snake.Body = append([][]int{{snakeHead[0], snakeHead[1] + 1}}, snake.Body...)
+		snake.Body = append([][]int{{snakeHead[0], snakeHead[1] - 1}}, snake.Body...)
 
 		snake.Direction = objects.Up
 
 	}
-
-	return snake
 }
 
-func MoveDown(snake objects.Snake) objects.Snake {
+func MoveDown(snake *objects.Snake) {
 	/*
 	 Turn the snake down.
 
@@ -157,11 +149,9 @@ func MoveDown(snake objects.Snake) objects.Snake {
 		snakeHead := snake.Body[0]
 
 		snake.Body = snake.Body[:len(snake.Body)-1]
-		snake.Body = append([][]int{{snakeHead[0], snakeHead[1] - 1}}, snake.Body...)
+		snake.Body = append([][]int{{snakeHead[0], snakeHead[1] + 1}}, snake.Body...)
 
 		snake.Direction = objects.Down
 
 	}
-
-	return snake
 }
