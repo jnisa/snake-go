@@ -5,10 +5,10 @@
 - Create a Makefile to automatically install the dependencies;
 
 **Changes on the current version of the code**
-- All the functions that envolve manipulating the board should be modified to leverage pointers;
-- The inputs from the keyboard should be detected by using the `ebitengine` package;
-- Check if there's functions that can be excluded cause they're not being used;
-- Check if there's function that can be changed from the following:
+- [**DONE**] All the functions that envolve manipulating the board should be modified to leverage pointers;
+- [] The inputs from the keyboard should be detected by using the `ebitengine` package;
+- [] Check if there's functions that can be excluded cause they're not being used;
+- [] Check if there's function that can be changed from the following:
 
 ```
 func GetPositionValue(b Board, x_coord int, y_coord int) int {
