@@ -13,6 +13,7 @@ const (
 
 type Board struct {
 	Cells [32][32]int
+	Food  []int
 }
 
 type Snake struct {

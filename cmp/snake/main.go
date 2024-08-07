@@ -25,13 +25,11 @@ import (
 	"github.com/jnisa/snake-go/pkg/states"
 )
 
-// TODO. check if these dimensions are ok
-// TODO. there must be a disalignment the board array and the dimensions of the screen
 const (
-	ScreenWidth  = 1000
-	ScreenHeight = 1000
-	BoardHeight  = 100
-	boardWidth   = 100
+	ScreenWidth  = 640
+	ScreenHeight = 640
+	BoardHeight  = 32
+	boardWidth   = 32
 	CellSize     = 20
 )
 
@@ -39,7 +37,6 @@ type Game struct {
 	board      objects.Board
 	snake      objects.Snake
 	lastUpdate time.Time
-	// boardImage *ebiten.Image
 }
 
 func (g *Game) Update() error {
@@ -50,34 +47,37 @@ func (g *Game) Update() error {
 	 :param g: current game state
 	*/
 
+	// TODO. add a press to start screen here
+
 	now := time.Now()
 
-	if now.Sub(g.lastUpdate) >= time.Second {
-
+	// TODO. change the values that is multiplied by the time.Millisecond
+	// depending on the level of the game
+	if now.Sub(g.lastUpdate) >= time.Millisecond*100 {
 		switch {
 		case ebiten.IsKeyPressed(ebiten.KeyArrowLeft):
-			fmt.Println("Left arrow pressed!")
 			moves.MoveLeft(&g.snake)
 		case ebiten.IsKeyPressed(ebiten.KeyArrowRight):
-			fmt.Println("Right arrow pressed!")
 			moves.MoveRight(&g.snake)
 		case ebiten.IsKeyPressed(ebiten.KeyArrowUp):
-			fmt.Println("Up arrow pressed!")
 			moves.MoveUp(&g.snake)
 		case ebiten.IsKeyPressed(ebiten.KeyArrowDown):
-			fmt.Println("Down arrow pressed!")
 			moves.MoveDown(&g.snake)
 		case inpututil.IsKeyJustPressed(ebiten.KeyEscape):
-			fmt.Println("Quitting the game...")
 			return fmt.Errorf("the user has quit the game")
-
-		// TODO. not sure if this should stay out of the switch
-		case states.IsGameOver(g.snake, g.board):
-			return fmt.Errorf("Game Over")
 		default:
 			moves.UpdateSnake(&g.snake)
 		}
 
+		if len(g.board.Food) == 0 {
+			x, y := auxiliars.GetRandomPosition(g.snake, g.board)
+			g.board.Food = []int{x, y}
+		}
+		if states.IsGameOver(g.snake, g.board) {
+			return fmt.Errorf("Game Over")
+		}
+
+		states.SnakeIngestionUpdate(&g.snake, &g.board)
 		g.lastUpdate = now
 	}
 
@@ -115,7 +115,9 @@ func (g *Game) DrawBoard(screen *ebiten.Image) {
 	/*
 	 Render the board on the front-end.
 
-	 :param screen: ADD A DESCRIPTION HERE...
+	 // TODO. this function needs to consider that there might be food in the board
+
+	 :param screen: The screen on which to draw the board.
 	*/
 
 	for y := 0; y < BoardHeight; y++ {
@@ -126,7 +128,7 @@ func (g *Game) DrawBoard(screen *ebiten.Image) {
 				float64(y*CellSize),
 				float64(CellSize),
 				float64(CellSize),
-				color.RGBA{116, 116, 116, 0},
+				color.RGBA{116, 116, 116, 255},
 			)
 		}
 	}
@@ -159,15 +161,15 @@ func (g *Game) DrawFood(screen *ebiten.Image) {
 	 :param screen: ADD A DESCRIPTION HERE...
 	*/
 
-	if auxiliars.BoardContainsValue(1, g.board) {
-		x, y := auxiliars.GetRandomPosition(g.snake, g.board)
+	if (len(g.board.Food)) != 0 {
+		x, y := g.board.Food[0]*CellSize, g.board.Food[1]*CellSize
 		ebitenutil.DrawRect(
 			screen,
 			float64(x),
 			float64(y),
 			CellSize,
 			CellSize,
-			color.RGBA{183, 185, 5, 0},
+			color.RGBA{214, 212, 59, 5},
 		)
 	}
 }

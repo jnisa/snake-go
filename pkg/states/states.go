@@ -54,8 +54,7 @@ func IsGameOver(snake objects.Snake, board objects.Board) bool {
 	return checkCollision(snake, board) || checkBiteItself(snake)
 }
 
-// TODO. this function needs to be adapted - we should use pointers here instead of this
-func SnakeIngestionUpdate(snake objects.Snake, board objects.Board) (objects.Snake, objects.Board) {
+func SnakeIngestionUpdate(snake *objects.Snake, board *objects.Board) {
 	/*
 	 If there's an ingestion of food, update the snake's body.
 
@@ -74,10 +73,11 @@ func SnakeIngestionUpdate(snake objects.Snake, board objects.Board) (objects.Sna
 			there's food
 		*/
 
-		return board.Cells[snake.Body[0][0]][snake.Body[0][1]] == 1
+		return snake.Body[0][0] == board.Food[0] && snake.Body[0][1] == board.Food[1]
 	}
 
-	addNewTile := func(snake objects.Snake) objects.Snake {
+	// TODO. adjust this piece of code
+	addNewTile := func(snake *objects.Snake) {
 		/*
 		 Add a new tile to the snake's body.
 
@@ -91,30 +91,25 @@ func SnakeIngestionUpdate(snake objects.Snake, board objects.Board) (objects.Sna
 		 :return: the snake updated with a new tile in the body
 		*/
 
-		snakeHead := snake.Body[0]
+		snakeTail := snake.Body[len(snake.Body)-1]
 		snakeDirection := snake.Direction
 		snake.Score += 1
 
 		switch snakeDirection {
 		case objects.Up:
-			snake.Body = append([][]int{{snakeHead[0], snakeHead[1] + 1}}, snake.Body...)
+			snake.Body = append(snake.Body, []int{snakeTail[0], snakeTail[1] - 1})
 		case objects.Down:
-			snake.Body = append([][]int{{snakeHead[0], snakeHead[1] - 1}}, snake.Body...)
+			snake.Body = append(snake.Body, []int{snakeTail[0], snakeTail[1] + 1})
 		case objects.Left:
-			snake.Body = append([][]int{{snakeHead[0] - 1, snakeHead[1]}}, snake.Body...)
+			snake.Body = append(snake.Body, []int{snakeTail[0] - 1, snakeTail[1]})
 		case objects.Right:
-			snake.Body = append([][]int{{snakeHead[0] + 1, snakeHead[1]}}, snake.Body...)
+			snake.Body = append(snake.Body, []int{snakeTail[0] + 1, snakeTail[1]})
 		}
-
-		return snake
 	}
 
-	// if there's an ingestion then we need to set the eaten tile to 0
-	// and add a new tile to the snake's body
-	if isIngestion(snake, board) {
-		board.Cells[snake.Body[0][0]][snake.Body[0][1]] = 0
-		snake = addNewTile(snake)
+	if isIngestion(*snake, *board) {
+		var newFoodPosition []int
+		board.Food = newFoodPosition
+		addNewTile(snake)
 	}
-
-	return snake, board
 }

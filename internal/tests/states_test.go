@@ -57,26 +57,23 @@ func TestSnakeIngestionUpdate_Up(t *testing.T) {
 	 Test the SnakeIngestionUpdate function - when the snake is moving up.
 	*/
 
-	var test_board objects.Board
-
-	test_snake := objects.Snake{
+	var actual_board objects.Board
+	actual_snake := objects.Snake{
 		Body:      [][]int{{10, 11}, {10, 10}, {10, 9}},
 		Direction: objects.Up,
 		Score:     0,
 	}
 
 	// add food to the board
-	test_board.Cells[10][11] = 1
+	actual_board.Food = []int{11, 10}
 
-	actual_snake, actual_board := states.SnakeIngestionUpdate(test_snake, test_board)
+	states.SnakeIngestionUpdate(&actual_snake, &actual_board)
 	expected_snake := objects.Snake{
 		Body:      [][]int{{10, 12}, {10, 11}, {10, 10}, {10, 9}},
 		Direction: objects.Up,
 		Score:     1,
 	}
-	expected_board := objects.Board{
-		Cells: [32][32]int{},
-	}
+	var expected_board objects.Board
 
 	assert.Equal(t, expected_snake, actual_snake)
 	assert.Equal(t, expected_board, actual_board)
