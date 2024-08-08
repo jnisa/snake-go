@@ -1,39 +1,34 @@
-### **Snake**
 
-**TODO** 
-- Use [ebitengine](https://ebitengine.org/) to play the game;
-- Create a Makefile to automatically install the dependencies;
+<h1 align="center"> 
+  <strong>Snake</strong>
+</h1>
 
-**Changes on the current version of the code**
-- [**DONE**] All the functions that envolve manipulating the board should be modified to leverage pointers;
-- [] The inputs from the keyboard should be detected by using the `ebitengine` package;
-- [] Check if there's functions that can be excluded cause they're not being used;
-- [] Check if there's function that can be changed from the following:
+<p align="center">
+    <img src="./.docs/game_logo.jpeg" width="100" height="100">
+</p>
+
+<div align="center">
+
+  <a href="go version">![go_version](https://img.shields.io/badge/go-1.22.5-blue)</a>
+  <a href="code coverage">![coverage](https://img.shields.io/badge/coverage-95.77%25-green)</a>
+  <a href="tests">![tests](https://img.shields.io/badge/tests-26%20passed%2C%200%20failed-brightgreen)</a>
+
+</div>
+
+#### **Description**
+
+This is a simple snake game made in Golang using the ebitengine library.
+
+#### **How to play**
+
+- Use the arrow keys to move the snake.
+- Eat the food to grow.
+- Don't hit the walls or yourself.
+
+#### **Play**
+
+To play the game, run the following command:
 
 ```
-func GetPositionValue(b Board, x_coord int, y_coord int) int {
-    return Board.Cells[x_coord][y_coord]
-}
+go run cmp/snake/main.go
 ```
-
-to
-
-```
-func (b Board) GetPositionValue (x_coord int, y_coord int) int{
-    return Board.Cells[x_coord][y_coord]
-}
-```
-
-they both do the same thing, but we should get use to the Golang notation;
-- [DONE] Reconsider the structure of the project - most of the repos I've checked online would have the 
-`auxiliars.go`, `board.go`, `inputs.go`, etc scripts inside one directory only;
-`Note`: according to this article the structure that we have atm is the one that follows the best practises.
-
-**Documentation with Go best-practises**
-- [Golang official documentation](https://go.dev/doc/effective_go);
-- 
-
-
-**Learning resources**
-
-1. [Pointers in Golang: when, why, and how to use them?](https://www.youtube.com/watch?v=3WsEDZRif6U)

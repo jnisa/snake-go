@@ -65,11 +65,11 @@ func TestSnakeIngestionUpdate_Up(t *testing.T) {
 	}
 
 	// add food to the board
-	actual_board.Food = []int{11, 10}
+	actual_board.Food = []int{10, 11}
 
 	states.SnakeIngestionUpdate(&actual_snake, &actual_board)
 	expected_snake := objects.Snake{
-		Body:      [][]int{{10, 12}, {10, 11}, {10, 10}, {10, 9}},
+		Body:      [][]int{{10, 11}, {10, 10}, {10, 9}, {10, 8}},
 		Direction: objects.Up,
 		Score:     1,
 	}

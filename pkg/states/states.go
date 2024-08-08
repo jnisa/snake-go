@@ -56,7 +56,7 @@ func IsGameOver(snake objects.Snake, board objects.Board) bool {
 
 func SnakeIngestionUpdate(snake *objects.Snake, board *objects.Board) {
 	/*
-	 If there's an ingestion of food, update the snake's body.
+	 If there's an ingestion of food, update the snake's body accordingly.
 
 	 :param snake: list of the snake's body
 	 :param board: matrix representing the board
@@ -82,8 +82,8 @@ func SnakeIngestionUpdate(snake *objects.Snake, board *objects.Board) {
 		 Add a new tile to the snake's body.
 
 		 The new tile will be added to the end of the snake's body. This is done
-		 by getting the first tile of the snake's body and adding a new tile to
-		 the first position of the snake's body.
+		 by getting the last tile of the snake's body and adding a new tile to
+		 the last position of the snake's body.
 
 		 To make that happen, the Direction of the snake must be taken into account.
 

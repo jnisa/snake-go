@@ -6,7 +6,6 @@
 // 1. Add a description to the functions
 // 2. Reallocate some of the functions into a game dedicated script
 // 3. Add a few more functions to the game script
-// 4. Add a clock to the game
 //////////////////////////////////////////////////////////////////////////
 
 package main
@@ -89,8 +88,8 @@ func (g *Game) Update() error {
 			x, y := auxiliars.GetRandomPosition(g.snake, g.board)
 			g.board.Food = []int{x, y}
 		}
-		if states.IsGameOver(g.snake, g.board) {
-			return fmt.Errorf("Game Over")
+		if states.IsGameOver(g.snake, g.board) || ebiten.IsKeyPressed(ebiten.KeyEscape) {
+			g.state = StateGameOver
 		}
 
 		states.SnakeIngestionUpdate(&g.snake, &g.board)
@@ -110,9 +109,12 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	 :param screen: ADD A DESCRIPITON HERE...
 	*/
 
-	if g.state == StateStartScreen {
+	switch {
+	case g.state == StateStartScreen:
 		g.DrawStartScreen(screen)
-	} else {
+	case g.state == StateGameOver:
+		g.DrawGameOverScreen(screen)
+	default:
 		g.DrawBoard(screen)
 		g.DrawSnake(screen)
 		g.DrawFood(screen)
@@ -133,11 +135,9 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeigh
 
 func (g *Game) DrawBoard(screen *ebiten.Image) {
 	/*
-	 Render the board on the front-end.
+	 Render the board on the game screen.
 
-	 // TODO. this function needs to consider that there might be food in the board
-
-	 :param screen: The screen on which to draw the board.
+	 :param screen: the screen on which to draw the board.
 	*/
 
 	for y := 0; y < BoardHeight; y++ {
@@ -154,11 +154,12 @@ func (g *Game) DrawBoard(screen *ebiten.Image) {
 	}
 }
 
+// TODO. the snake is currently a set of pixels and should leverage images
 func (g *Game) DrawSnake(screen *ebiten.Image) {
 	/*
-	 Render the snake on the front-end.
+	 Render the snake on the board game.
 
-	 :param screen: ADD A DESCRIPTION HERE...
+	 :param screen: the screen on which to draw the snake.
 	*/
 
 	for _, p := range g.snake.Body {
@@ -174,11 +175,13 @@ func (g *Game) DrawSnake(screen *ebiten.Image) {
 	}
 }
 
+// TODO. currently the food is just a pixel change this to an apple size
+// in a board pixel
 func (g *Game) DrawFood(screen *ebiten.Image) {
 	/*
-	 Render the food on the front-end.
+	 Add the food to the game board.
 
-	 :param screen: ADD A DESCRIPTION HERE...
+	 :param screen: the screen on which to draw the food.
 	*/
 
 	if (len(g.board.Food)) != 0 {
@@ -194,14 +197,37 @@ func (g *Game) DrawFood(screen *ebiten.Image) {
 	}
 }
 
+// TODO. change the current font to something more arcade looking
 func (g *Game) DrawStartScreen(screen *ebiten.Image) {
 	/*
 	 Render the start screen.
 
-	 :param screen: The screen on which to draw the start screen.
+	 This screen will the first facing screen that the user will see when the
+	 game is started.
+
+	 :param screen: the screen on which to draw the start screen.
 	*/
 
 	msg := "Press SPACE to Start"
+	bounds := text.BoundString(basicfont.Face7x13, msg)
+	x := (ScreenWidth - bounds.Dx()) / 2
+	y := (ScreenHeight - bounds.Dy()) / 2
+
+	text.Draw(screen, msg, basicfont.Face7x13, x, y, color.White)
+}
+
+// TODO. change the current font to something more arcade looking
+func (g *Game) DrawGameOverScreen(screen *ebiten.Image) {
+	/*
+	 Render the Game Over screen.
+
+	 This screen will automatically show up when the snake either collides
+	 with the walls or bites itself.
+
+	 :param screen: the screen on which to draw the start screen.
+	*/
+
+	msg := "Game Over"
 	bounds := text.BoundString(basicfont.Face7x13, msg)
 	x := (ScreenWidth - bounds.Dx()) / 2
 	y := (ScreenHeight - bounds.Dy()) / 2
