@@ -19,10 +19,12 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
+	"github.com/hajimehoshi/ebiten/v2/text"
 	"github.com/jnisa/snake-go/pkg/auxiliars"
 	"github.com/jnisa/snake-go/pkg/moves"
 	"github.com/jnisa/snake-go/pkg/objects"
 	"github.com/jnisa/snake-go/pkg/states"
+	"golang.org/x/image/font/basicfont"
 )
 
 const (
@@ -33,10 +35,19 @@ const (
 	CellSize     = 20
 )
 
+type GameState int
+
+const (
+	StateStartScreen GameState = iota
+	StateRunning
+	StateGameOver
+)
+
 type Game struct {
 	board      objects.Board
 	snake      objects.Snake
 	lastUpdate time.Time
+	state      GameState
 }
 
 func (g *Game) Update() error {
@@ -47,7 +58,12 @@ func (g *Game) Update() error {
 	 :param g: current game state
 	*/
 
-	// TODO. add a press to start screen here
+	if g.state == StateStartScreen {
+		if inpututil.IsKeyJustPressed(ebiten.KeySpace) {
+			g.state = StateRunning
+		}
+		return nil
+	}
 
 	now := time.Now()
 
@@ -94,9 +110,13 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	 :param screen: ADD A DESCRIPITON HERE...
 	*/
 
-	g.DrawBoard(screen)
-	g.DrawSnake(screen)
-	g.DrawFood(screen)
+	if g.state == StateStartScreen {
+		g.DrawStartScreen(screen)
+	} else {
+		g.DrawBoard(screen)
+		g.DrawSnake(screen)
+		g.DrawFood(screen)
+	}
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
@@ -172,6 +192,21 @@ func (g *Game) DrawFood(screen *ebiten.Image) {
 			color.RGBA{214, 212, 59, 5},
 		)
 	}
+}
+
+func (g *Game) DrawStartScreen(screen *ebiten.Image) {
+	/*
+	 Render the start screen.
+
+	 :param screen: The screen on which to draw the start screen.
+	*/
+
+	msg := "Press SPACE to Start"
+	bounds := text.BoundString(basicfont.Face7x13, msg)
+	x := (ScreenWidth - bounds.Dx()) / 2
+	y := (ScreenHeight - bounds.Dy()) / 2
+
+	text.Draw(screen, msg, basicfont.Face7x13, x, y, color.White)
 }
 
 func main() {
