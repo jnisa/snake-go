@@ -13,6 +13,8 @@ package main
 import (
 	"fmt"
 	"image/color"
+	_ "image/png" // Register PNG format
+	"log"
 	"time"
 
 	"github.com/hajimehoshi/ebiten/v2"
@@ -47,6 +49,7 @@ type Game struct {
 	snake      objects.Snake
 	lastUpdate time.Time
 	state      GameState
+	foodImage  *ebiten.Image
 }
 
 func (g *Game) Update() error {
@@ -155,6 +158,7 @@ func (g *Game) DrawBoard(screen *ebiten.Image) {
 }
 
 // TODO. the snake is currently a set of pixels and should leverage images
+// TODO. this function needs some fine tunning to accomodate the images
 func (g *Game) DrawSnake(screen *ebiten.Image) {
 	/*
 	 Render the snake on the board game.
@@ -175,25 +179,27 @@ func (g *Game) DrawSnake(screen *ebiten.Image) {
 	}
 }
 
-// TODO. currently the food is just a pixel change this to an apple size
-// in a board pixel
 func (g *Game) DrawFood(screen *ebiten.Image) {
 	/*
 	 Add the food to the game board.
+
+	 This function will add an image of an apple that will represent the food.
+	 Additionally, the image will be rescalled to fit the size of the cell.
 
 	 :param screen: the screen on which to draw the food.
 	*/
 
 	if (len(g.board.Food)) != 0 {
 		x, y := g.board.Food[0]*CellSize, g.board.Food[1]*CellSize
-		ebitenutil.DrawRect(
-			screen,
-			float64(x),
-			float64(y),
-			CellSize,
-			CellSize,
-			color.RGBA{214, 212, 59, 5},
-		)
+
+		foodImage := g.foodImage
+
+		op := &ebiten.DrawImageOptions{}
+		scaleX := float64(CellSize) / float64(foodImage.Bounds().Dx())
+		scaleY := float64(CellSize) / float64(foodImage.Bounds().Dy())
+		op.GeoM.Scale(scaleX, scaleY)
+		op.GeoM.Translate(float64(x), float64(y))
+		screen.DrawImage(foodImage, op)
 	}
 }
 
@@ -236,6 +242,14 @@ func (g *Game) DrawGameOverScreen(screen *ebiten.Image) {
 }
 
 func main() {
+	// Load the images that will be used in the UI of the game
+	// TODO. not sure if this can be converted into a separate function - maybe init
+	// TODO. the location of the images should be a constant variable as well
+	foodImage, _, err := ebitenutil.NewImageFromFile("/Users/joao.nisa/Desktop/Projects/personal/snake-go/snake_elements/apple.png")
+
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	game := &Game{
 		snake: objects.Snake{
@@ -243,6 +257,7 @@ func main() {
 			Direction: objects.Right,
 			Score:     0,
 		},
+		foodImage: foodImage,
 	}
 
 	ebiten.SetWindowSize(ScreenWidth, ScreenHeight)
