@@ -50,6 +50,8 @@ type Game struct {
 	lastUpdate time.Time
 	state      GameState
 	foodImage  *ebiten.Image
+	snakeHead  *ebiten.Image
+	snakeTail  *ebiten.Image
 }
 
 func (g *Game) Update() error {
@@ -159,6 +161,7 @@ func (g *Game) DrawBoard(screen *ebiten.Image) {
 
 // TODO. the snake is currently a set of pixels and should leverage images
 // TODO. this function needs some fine tunning to accomodate the images
+// TODO. don't forget to ROTATE the images depending on the direction of the snake
 func (g *Game) DrawSnake(screen *ebiten.Image) {
 	/*
 	 Render the snake on the board game.
@@ -166,16 +169,44 @@ func (g *Game) DrawSnake(screen *ebiten.Image) {
 	 :param screen: the screen on which to draw the snake.
 	*/
 
-	for _, p := range g.snake.Body {
-		x, y := p[0]*CellSize, p[1]*CellSize
-		ebitenutil.DrawRect(
-			screen,
-			float64(x),
-			float64(y),
-			CellSize,
-			CellSize,
-			color.RGBA{255, 0, 0, 255},
-		)
+	// Create a new function that gets an image an rescales it to the size of the cell
+	rescaleImage := func(image *ebiten.Image, x, y int) {
+		/*
+		 Rescale the image to the size of the cell.
+
+		 :param image: the image to be rescaled
+		 :return: the rescaled image
+		*/
+
+		op := &ebiten.DrawImageOptions{}
+
+		scaleX := float64(CellSize) / float64(image.Bounds().Dx())
+		scaleY := float64(CellSize) / float64(image.Bounds().Dy())
+
+		op.GeoM.Scale(scaleX, scaleY)
+		op.GeoM.Translate(float64(x), float64(y))
+
+		screen.DrawImage(image, op)
+	}
+
+	for idx, coord := range g.snake.Body {
+		x, y := coord[0]*CellSize, coord[1]*CellSize
+
+		switch idx {
+		case 0:
+			rescaleImage(g.snakeHead, x, y)
+		case len(g.snake.Body) - 1:
+			rescaleImage(g.snakeTail, x, y)
+		default:
+			ebitenutil.DrawRect(
+				screen,
+				float64(x),
+				float64(y),
+				CellSize,
+				CellSize,
+				color.RGBA{255, 0, 0, 255},
+			)
+		}
 	}
 }
 
@@ -245,7 +276,9 @@ func main() {
 	// Load the images that will be used in the UI of the game
 	// TODO. not sure if this can be converted into a separate function - maybe init
 	// TODO. the location of the images should be a constant variable as well
-	foodImage, _, err := ebitenutil.NewImageFromFile("/Users/joao.nisa/Desktop/Projects/personal/snake-go/snake_elements/apple.png")
+	foodImage, _, err := ebitenutil.NewImageFromFile("snake_elements/apple.png")
+	snakeHead, _, err := ebitenutil.NewImageFromFile("snake_elements/head.png")
+	snakeTail, _, err := ebitenutil.NewImageFromFile("snake_elements/tail.png")
 
 	if err != nil {
 		log.Fatal(err)
@@ -258,6 +291,8 @@ func main() {
 			Score:     0,
 		},
 		foodImage: foodImage,
+		snakeHead: snakeHead,
+		snakeTail: snakeTail,
 	}
 
 	ebiten.SetWindowSize(ScreenWidth, ScreenHeight)
