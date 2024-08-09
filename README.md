@@ -32,3 +32,21 @@ To play the game, run the following command:
 ```
 go run cmp/snake/main.go
 ```
+
+#### **Things missing**
+
+- Replace pixels by images on the snake and the food:
+    - Snake head
+    - Snake tail
+    - Snake body:
+        - when down to right: `curve_1.png`
+        - when down to left: `curve_2.png`
+        - when up to right: `curve_4.png`
+        - when up to left: `curve_3.png`
+        - when right to up: `curve_2.png`
+        - when right to down: `curve_3.png`
+        - when left to up: `curve_1.png`
+        - when left to down: `curve_4.png`
+        - else continue straight: `straight.png`
+    - Food
+    _Note_: To make this happen we might need to had a new object to the Snake struct `Edges` which will be a Map that to a coordinate will have a string that will be the image path. In case the coordinate is no longer part of the snake body then we remove it from the map.
