@@ -22,6 +22,7 @@ import (
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
 	"github.com/hajimehoshi/ebiten/v2/text"
 	"github.com/jnisa/snake-go/pkg/auxiliars"
+	"github.com/jnisa/snake-go/pkg/game"
 	"github.com/jnisa/snake-go/pkg/moves"
 	"github.com/jnisa/snake-go/pkg/objects"
 	"github.com/jnisa/snake-go/pkg/states"
@@ -169,34 +170,16 @@ func (g *Game) DrawSnake(screen *ebiten.Image) {
 	 :param screen: the screen on which to draw the snake.
 	*/
 
-	// Create a new function that gets an image an rescales it to the size of the cell
-	rescaleImage := func(image *ebiten.Image, x, y int) {
-		/*
-		 Rescale the image to the size of the cell.
-
-		 :param image: the image to be rescaled
-		 :return: the rescaled image
-		*/
-
-		op := &ebiten.DrawImageOptions{}
-
-		scaleX := float64(CellSize) / float64(image.Bounds().Dx())
-		scaleY := float64(CellSize) / float64(image.Bounds().Dy())
-
-		op.GeoM.Scale(scaleX, scaleY)
-		op.GeoM.Translate(float64(x), float64(y))
-
-		screen.DrawImage(image, op)
-	}
-
 	for idx, coord := range g.snake.Body {
 		x, y := coord[0]*CellSize, coord[1]*CellSize
 
 		switch idx {
 		case 0:
-			rescaleImage(g.snakeHead, x, y)
+			imageOperations := game.AdjustImage(g.snakeHead, x, y, CellSize, 0)
+			screen.DrawImage(g.snakeHead, imageOperations)
 		case len(g.snake.Body) - 1:
-			rescaleImage(g.snakeTail, x, y)
+			imageOperations := game.AdjustImage(g.snakeTail, x, y, CellSize, 0)
+			screen.DrawImage(g.snakeTail, imageOperations)
 		default:
 			ebitenutil.DrawRect(
 				screen,

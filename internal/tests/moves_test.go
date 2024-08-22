@@ -21,6 +21,13 @@ func TestUpdateSnakeBasic(t *testing.T) {
 	actual_snake_vertical := objects.Snake{
 		Body:      [][]int{{0, 1}, {0, 2}, {0, 3}},
 		Direction: objects.Up,
+		TurningPoints: []map[string]interface{}{
+			{
+				"position":           []int{0, 3},
+				"previous_direction": objects.Down,
+				"current_direction":  objects.Up,
+			},
+		},
 	}
 	actual_snake_horizontal := objects.Snake{
 		Body:      [][]int{{4, 3}, {3, 3}, {3, 2}},
@@ -31,8 +38,9 @@ func TestUpdateSnakeBasic(t *testing.T) {
 	moves.UpdateSnake(&actual_snake_horizontal)
 
 	expected_snake_vertical := objects.Snake{
-		Body:      [][]int{{0, 0}, {0, 1}, {0, 2}},
-		Direction: objects.Up,
+		Body:          [][]int{{0, 0}, {0, 1}, {0, 2}},
+		Direction:     objects.Up,
+		TurningPoints: []map[string]interface{}{},
 	}
 	expected_snake_horizontal := objects.Snake{
 		Body:      [][]int{{5, 3}, {4, 3}, {3, 3}},
@@ -49,15 +57,22 @@ func TestMoveRight_basic(t *testing.T) {
 	*/
 
 	actual_snake := objects.Snake{
-		Body:      [][]int{{0, 0}, {0, 1}, {0, 2}},
-		Direction: objects.Down,
+		Body:          [][]int{{0, 0}, {0, 1}, {0, 2}},
+		Direction:     objects.Down,
+		TurningPoints: []map[string]interface{}{},
 	}
 
 	moves.MoveRight(&actual_snake)
 	expected_snake := objects.Snake{
 		Body:      [][]int{{1, 0}, {0, 0}, {0, 1}},
 		Direction: objects.Right,
-	}
+		TurningPoints: []map[string]interface{}{
+			{
+				"position":           []int{0, 0},
+				"previous_direction": objects.Down,
+				"current_direction":  objects.Right,
+			},
+		}}
 
 	assert.Equal(t, expected_snake, actual_snake)
 }
@@ -68,14 +83,16 @@ func TestMoveRight_exception(t *testing.T) {
 	*/
 
 	actual_snake := objects.Snake{
-		Body:      [][]int{{0, 0}, {0, 1}, {0, 2}},
-		Direction: objects.Left,
+		Body:          [][]int{{0, 0}, {0, 1}, {0, 2}},
+		Direction:     objects.Left,
+		TurningPoints: []map[string]interface{}{},
 	}
 
 	moves.MoveRight(&actual_snake)
 	expected_snake := objects.Snake{
-		Body:      [][]int{{0, 0}, {0, 1}, {0, 2}},
-		Direction: objects.Left,
+		Body:          [][]int{{0, 0}, {0, 1}, {0, 2}},
+		Direction:     objects.Left,
+		TurningPoints: []map[string]interface{}{},
 	}
 
 	assert.Equal(t, expected_snake, actual_snake)
@@ -87,15 +104,22 @@ func TestMoveLeft_basic(t *testing.T) {
 	*/
 
 	actual_snake := objects.Snake{
-		Body:      [][]int{{0, 0}, {0, 1}, {0, 2}},
-		Direction: objects.Down,
+		Body:          [][]int{{0, 0}, {0, 1}, {0, 2}},
+		Direction:     objects.Down,
+		TurningPoints: []map[string]interface{}{},
 	}
 
 	moves.MoveLeft(&actual_snake)
 	expected_snake := objects.Snake{
 		Body:      [][]int{{-1, 0}, {0, 0}, {0, 1}},
 		Direction: objects.Left,
-	}
+		TurningPoints: []map[string]interface{}{
+			{
+				"position":           []int{0, 0},
+				"previous_direction": objects.Down,
+				"current_direction":  objects.Left,
+			},
+		}}
 
 	assert.Equal(t, expected_snake, actual_snake)
 }
@@ -106,14 +130,16 @@ func TestMoveLeft_exception(t *testing.T) {
 	*/
 
 	actual_snake := objects.Snake{
-		Body:      [][]int{{0, 0}, {0, 1}, {0, 2}},
-		Direction: objects.Right,
+		Body:          [][]int{{0, 0}, {0, 1}, {0, 2}},
+		Direction:     objects.Right,
+		TurningPoints: []map[string]interface{}{},
 	}
 
 	moves.MoveLeft(&actual_snake)
 	expected_snake := objects.Snake{
-		Body:      [][]int{{0, 0}, {0, 1}, {0, 2}},
-		Direction: objects.Right,
+		Body:          [][]int{{0, 0}, {0, 1}, {0, 2}},
+		Direction:     objects.Right,
+		TurningPoints: []map[string]interface{}{},
 	}
 
 	assert.Equal(t, expected_snake, actual_snake)
@@ -125,15 +151,22 @@ func TestMoveUp_basic(t *testing.T) {
 	*/
 
 	actual_snake := objects.Snake{
-		Body:      [][]int{{15, 10}, {16, 10}, {17, 10}},
-		Direction: objects.Left,
+		Body:          [][]int{{15, 10}, {16, 10}, {17, 10}},
+		Direction:     objects.Left,
+		TurningPoints: []map[string]interface{}{},
 	}
 
 	moves.MoveUp(&actual_snake)
 	expected_snake := objects.Snake{
 		Body:      [][]int{{15, 9}, {15, 10}, {16, 10}},
 		Direction: objects.Up,
-	}
+		TurningPoints: []map[string]interface{}{
+			{
+				"position":           []int{15, 10},
+				"previous_direction": objects.Left,
+				"current_direction":  objects.Up,
+			},
+		}}
 
 	assert.Equal(t, expected_snake, actual_snake)
 }
@@ -144,14 +177,16 @@ func TestMoveUp_exception(t *testing.T) {
 	*/
 
 	actual_snake := objects.Snake{
-		Body:      [][]int{{0, 0}, {0, 1}, {0, 2}},
-		Direction: objects.Down,
+		Body:          [][]int{{0, 0}, {0, 1}, {0, 2}},
+		Direction:     objects.Down,
+		TurningPoints: []map[string]interface{}{},
 	}
 
 	moves.MoveUp(&actual_snake)
 	expected_snake := objects.Snake{
-		Body:      [][]int{{0, 0}, {0, 1}, {0, 2}},
-		Direction: objects.Down,
+		Body:          [][]int{{0, 0}, {0, 1}, {0, 2}},
+		Direction:     objects.Down,
+		TurningPoints: []map[string]interface{}{},
 	}
 
 	assert.Equal(t, expected_snake, actual_snake)
@@ -163,15 +198,22 @@ func TestMoveDown_basic(t *testing.T) {
 	*/
 
 	actual_snake := objects.Snake{
-		Body:      [][]int{{1, 0}, {2, 0}, {3, 0}},
-		Direction: objects.Left,
+		Body:          [][]int{{1, 0}, {2, 0}, {3, 0}},
+		Direction:     objects.Left,
+		TurningPoints: []map[string]interface{}{},
 	}
 
 	moves.MoveDown(&actual_snake)
 	expected_snake := objects.Snake{
 		Body:      [][]int{{1, 1}, {1, 0}, {2, 0}},
 		Direction: objects.Down,
-	}
+		TurningPoints: []map[string]interface{}{
+			{
+				"position":           []int{1, 0},
+				"previous_direction": objects.Left,
+				"current_direction":  objects.Down,
+			},
+		}}
 
 	assert.Equal(t, expected_snake, actual_snake)
 }
@@ -182,14 +224,16 @@ func TestMoveDown_exception(t *testing.T) {
 	*/
 
 	actual_snake := objects.Snake{
-		Body:      [][]int{{0, 0}, {0, 1}, {0, 2}},
-		Direction: objects.Up,
+		Body:          [][]int{{0, 0}, {0, 1}, {0, 2}},
+		Direction:     objects.Up,
+		TurningPoints: []map[string]interface{}{},
 	}
 
 	moves.MoveDown(&actual_snake)
 	expected_snake := objects.Snake{
-		Body:      [][]int{{0, 0}, {0, 1}, {0, 2}},
-		Direction: objects.Up,
+		Body:          [][]int{{0, 0}, {0, 1}, {0, 2}},
+		Direction:     objects.Up,
+		TurningPoints: []map[string]interface{}{},
 	}
 
 	assert.Equal(t, expected_snake, actual_snake)

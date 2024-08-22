@@ -5,6 +5,7 @@ package auxiliars
 
 import (
 	"math/rand"
+	"reflect"
 
 	"github.com/jnisa/snake-go/pkg/objects"
 )
@@ -92,20 +93,18 @@ func RemoveDuplicates(elements [][]int) [][]int {
 	return non_duplicates
 }
 
-func BoardContainsValue(targetValue int, searchingBoard objects.Board) bool {
+func IsIn(targetValue []int, searchingList [][]int) bool {
 	/*
-	 Function that evaluates if a given value is present in a given nested list.
+	 Function that evaluates if a given list is present in a given nested list.
 
 	 :param targetValue: value to be searched
-	 :param searchingBoard: board that will be targeted by the search
+	 :param searchingList: list that will be targeted by the search
 	 :return: a boolean indicating whether the target values is present in the nested list
 	*/
 
-	for _, row := range searchingBoard.Cells {
-		for _, val := range row {
-			if val == targetValue {
-				return true
-			}
+	for _, val := range searchingList {
+		if reflect.DeepEqual(targetValue, val) {
+			return true
 		}
 	}
 

@@ -3,9 +3,12 @@
 package moves
 
 import (
+	"github.com/jnisa/snake-go/pkg/auxiliars"
 	"github.com/jnisa/snake-go/pkg/objects"
 )
 
+// TODO. when updating the snake body we need to check if there's isn't coordinates that
+// should be removed from the turning points list
 func UpdateSnake(snake *objects.Snake) {
 	/*
 	 Add a new coordinate to the snake's body when no movement is detected.
@@ -28,6 +31,29 @@ func UpdateSnake(snake *objects.Snake) {
 	 :return: the snake updated
 	*/
 
+	isTurningPointOutFunc := func(snake *objects.Snake) {
+		/*
+		 Check if the turning points are still part of the snake's body.
+
+		 Whenever the snake changes its direction, the head of the snake is added to
+		 the turning points list. This function will check if the turning points are
+		 still part of the snake's body. If they are not, then they will be removed
+		 from the list.
+
+		 :param snake: list of the snake's body
+		 :return: the snake updated
+		*/
+
+		for _, turningPoint := range snake.TurningPoints {
+
+			turningPointPosition := turningPoint["position"].([]int)
+
+			if !auxiliars.IsIn(turningPointPosition, snake.Body) {
+				snake.TurningPoints = snake.TurningPoints[1:]
+			}
+		}
+	}
+
 	var newCoordinate [][]int
 
 	switch snake.Direction {
@@ -43,6 +69,8 @@ func UpdateSnake(snake *objects.Snake) {
 
 	snake.Body = append(newCoordinate, snake.Body...)
 	snake.Body = snake.Body[:len(snake.Body)-1]
+
+	isTurningPointOutFunc(snake)
 }
 
 func MoveRight(snake *objects.Snake) {
@@ -57,19 +85,32 @@ func MoveRight(snake *objects.Snake) {
 	 will continue moving left. The only way to change the direction is to move
 	 up or down.
 
+	 Additionally, the head of the snake will be added to the turning points list.
+	 This will be usefukl to determine the image that will be applied to the snake's
+	 body.
+
 	 :param snake: list of the snake's body
 	 :return: the snake updated when moving to the right
 	*/
 
 	if snake.Direction != objects.Left {
 
+		// get the coordinates of the snake's head
 		snakeHead := snake.Body[0]
 
+		// remove the last position of the snake
 		snake.Body = snake.Body[:len(snake.Body)-1]
 		snake.Body = append([][]int{{snakeHead[0] + 1, snakeHead[1]}}, snake.Body...)
 
-		snake.Direction = objects.Right
+		// add the head to the turning points list
+		snake.TurningPoints = append(snake.TurningPoints, map[string]interface{}{
+			"position":           snakeHead,
+			"previous_direction": snake.Direction,
+			"current_direction":  objects.Right,
+		})
 
+		// update the snake's direction
+		snake.Direction = objects.Right
 	}
 }
 
@@ -85,19 +126,32 @@ func MoveLeft(snake *objects.Snake) {
 	 will continue moving right. The only way to change the direction is to move
 	 up or down.
 
+	 Additionally, the head of the snake will be added to the turning points list.
+	 This will be usefukl to determine the image that will be applied to the snake's
+	 body.
+
 	 :param snake: list of the snake's body
 	 :return: the snake updated when moving to the left
 	*/
 
 	if snake.Direction != objects.Right {
 
+		// get the coordinates of the snake's head
 		snakeHead := snake.Body[0]
 
+		// remove the last position of the snake
 		snake.Body = snake.Body[:len(snake.Body)-1]
 		snake.Body = append([][]int{{snakeHead[0] - 1, snakeHead[1]}}, snake.Body...)
 
-		snake.Direction = objects.Left
+		// add the head to the turning points list
+		snake.TurningPoints = append(snake.TurningPoints, map[string]interface{}{
+			"position":           snakeHead,
+			"previous_direction": snake.Direction,
+			"current_direction":  objects.Left,
+		})
 
+		// update the snake's direction
+		snake.Direction = objects.Left
 	}
 }
 
@@ -113,19 +167,32 @@ func MoveUp(snake *objects.Snake) {
 	 will continue moving down. The only way to change the direction is to move
 	 left or right.
 
+	 Additionally, the head of the snake will be added to the turning points list.
+	 This will be usefukl to determine the image that will be applied to the snake's
+	 body.
+
 	 :param snake: list of the snake's body
 	 :return: the snake updated when moving up
 	*/
 
 	if snake.Direction != objects.Down {
 
+		// get the coordinates of the snake's head
 		snakeHead := snake.Body[0]
 
+		// remove the last position of the snake
 		snake.Body = snake.Body[:len(snake.Body)-1]
 		snake.Body = append([][]int{{snakeHead[0], snakeHead[1] - 1}}, snake.Body...)
 
-		snake.Direction = objects.Up
+		// add the head to the turning points list
+		snake.TurningPoints = append(snake.TurningPoints, map[string]interface{}{
+			"position":           snakeHead,
+			"previous_direction": snake.Direction,
+			"current_direction":  objects.Up,
+		})
 
+		// update the snake's direction
+		snake.Direction = objects.Up
 	}
 }
 
@@ -141,18 +208,31 @@ func MoveDown(snake *objects.Snake) {
 	 will continue moving up. The only way to change the direction is to move
 	 left or right.
 
+	 Additionally, the head of the snake will be added to the turning points list.
+	 This will be usefukl to determine the image that will be applied to the snake's
+	 body.
+
 	 :param snake: list of the snake's body
 	 :return: the snake updated when moving down
 	*/
 
 	if snake.Direction != objects.Up {
 
+		// get the coordinates of the snake's head
 		snakeHead := snake.Body[0]
 
+		// remove the last position of the snake
 		snake.Body = snake.Body[:len(snake.Body)-1]
 		snake.Body = append([][]int{{snakeHead[0], snakeHead[1] + 1}}, snake.Body...)
 
-		snake.Direction = objects.Down
+		// add the head to the turning points list
+		snake.TurningPoints = append(snake.TurningPoints, map[string]interface{}{
+			"position":           snakeHead,
+			"previous_direction": snake.Direction,
+			"current_direction":  objects.Down,
+		})
 
+		// update the snake's direction
+		snake.Direction = objects.Down
 	}
 }
