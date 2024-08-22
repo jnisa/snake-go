@@ -14,7 +14,8 @@ import (
 	"fmt"
 	"image/color"
 	_ "image/png" // Register PNG format
-	"log"
+	"math"
+	"reflect"
 	"time"
 
 	"github.com/hajimehoshi/ebiten/v2"
@@ -46,14 +47,32 @@ const (
 )
 
 type Game struct {
-	board      objects.Board
-	snake      objects.Snake
-	lastUpdate time.Time
-	state      GameState
-	foodImage  *ebiten.Image
-	snakeHead  *ebiten.Image
-	snakeTail  *ebiten.Image
+	board              objects.Board
+	snake              objects.Snake
+	lastUpdate         time.Time
+	state              GameState
+	foodImage          *ebiten.Image
+	snakeHead          *ebiten.Image
+	snakeTail          *ebiten.Image
+	snakeVerticalRight *ebiten.Image
 }
+
+var (
+	apple *ebiten.Image = game.ImageLoader("snake_elements/apple.png")
+	tail  *ebiten.Image = game.ImageLoader("snake_elements/tail.png")
+	head  *ebiten.Image = game.ImageLoader("snake_elements/head.png")
+	// straight       *ebiten.Image = game.ImageLoader("snake_elements/straight.png")
+	verticalRight *ebiten.Image = game.ImageLoader("snake_elements/curve_1.png")
+	// verticalLeft   *ebiten.Image = game.ImageLoader("snake_elements/curve_2.png")
+	// horizontalDown *ebiten.Image = game.ImageLoader("snake_elements/curve_3.png")
+	// horizontalUp   *ebiten.Image = game.ImageLoader("snake_elements/curve_4.png")
+
+	// TODO. these variables are going to be used for the tail and head of the snake
+	Down  float64 = math.Pi / 2
+	Up    float64 = -math.Pi / 2
+	Right float64 = 0
+	Left  float64 = math.Pi
+)
 
 func (g *Game) Update() error {
 	/*
@@ -175,20 +194,31 @@ func (g *Game) DrawSnake(screen *ebiten.Image) {
 
 		switch idx {
 		case 0:
-			imageOperations := game.AdjustImage(g.snakeHead, x, y, CellSize, 0)
+			imageOperations := game.AdjustImage(g.snakeHead, x, y, CellSize, math.Pi/2)
 			screen.DrawImage(g.snakeHead, imageOperations)
 		case len(g.snake.Body) - 1:
-			imageOperations := game.AdjustImage(g.snakeTail, x, y, CellSize, 0)
+			imageOperations := game.AdjustImage(g.snakeTail, x, y, CellSize, math.Pi/2)
+			// imageOperations := game.AdjustImage(g.snakeTail, x, y, CellSize, 90)
 			screen.DrawImage(g.snakeTail, imageOperations)
 		default:
-			ebitenutil.DrawRect(
-				screen,
-				float64(x),
-				float64(y),
-				CellSize,
-				CellSize,
-				color.RGBA{255, 0, 0, 255},
-			)
+			for idx, point := range g.snake.TurningPoints {
+				if reflect.DeepEqual(coord, point["position"]) {
+					switch {
+					case g.snake.TurningPoints[idx]["previous_direction"] == objects.Down && g.snake.TurningPoints[idx]["current_direction"] == objects.Right:
+						imageOperations := game.AdjustImage(g.snakeVerticalRight, x, y, CellSize, 0)
+						screen.DrawImage(g.snakeVerticalRight, imageOperations)
+					}
+				} else {
+					ebitenutil.DrawRect(
+						screen,
+						float64(x),
+						float64(y),
+						CellSize,
+						CellSize,
+						color.RGBA{255, 0, 0, 255},
+					)
+				}
+			}
 		}
 	}
 }
@@ -256,26 +286,16 @@ func (g *Game) DrawGameOverScreen(screen *ebiten.Image) {
 }
 
 func main() {
-	// Load the images that will be used in the UI of the game
-	// TODO. not sure if this can be converted into a separate function - maybe init
-	// TODO. the location of the images should be a constant variable as well
-	foodImage, _, err := ebitenutil.NewImageFromFile("snake_elements/apple.png")
-	snakeHead, _, err := ebitenutil.NewImageFromFile("snake_elements/head.png")
-	snakeTail, _, err := ebitenutil.NewImageFromFile("snake_elements/tail.png")
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	game := &Game{
 		snake: objects.Snake{
 			Body:      [][]int{{12, 16}, {11, 16}, {10, 16}},
 			Direction: objects.Right,
 			Score:     0,
 		},
-		foodImage: foodImage,
-		snakeHead: snakeHead,
-		snakeTail: snakeTail,
+		foodImage:          apple,
+		snakeHead:          head,
+		snakeTail:          tail,
+		snakeVerticalRight: verticalRight,
 	}
 
 	ebiten.SetWindowSize(ScreenWidth, ScreenHeight)

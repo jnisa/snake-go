@@ -3,67 +3,60 @@
 package game
 
 import (
+	"log"
+
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 )
 
 func AdjustImage(image *ebiten.Image, x, y int, pixelSize int, rotation float64) *ebiten.DrawImageOptions {
 	/*
-	 Function that is responsible for adjusting the image to the desired size.
+	 Function that adjusts the image size, position, and rotation.
 
-	 It acts on two dimensions of the image: the size and position and the rotation.
-	 Meaning that the image size will be adjusted according to the pixelSize and, if
-	 it needs to be rotated, it will be rotated.
+	 It resizes the image according to the pixelSize, positions it at (x, y),
+	 and rotates it if the rotation value is not zero.
 
-	 :param image: the image to be rescaled
+	 :param image: the image to be adjusted
 	 :param x: x coordinate position
 	 :param y: y coordinate position
-	 :param pixelSize: size of the pixel to which the image will be rescaled
-	 :param rotation: rotation of the image
-	 :return: the rescaled image and draw options
+	 :param pixelSize: size of the pixel to which the image will be scaled
+	 :param rotation: rotation angle of the image in radians
+	 :return: draw options containing the transformations
 	*/
 
 	width, height := image.Bounds().Dx(), image.Bounds().Dy()
 
-	rotateImage := func(rotation float64, imageOps *ebiten.DrawImageOptions) *ebiten.DrawImageOptions {
-		/*
-		 Rotate the image by the given angle.
-
-		 :param image: the image to be rotated
-		 :param rotation: the angle of rotation
-		 :return: the rotated image
-		*/
-
-		imageOps.GeoM.Translate(-float64(width)/2, -float64(height)/2)
-		imageOps.GeoM.Rotate(rotation)
-
-		return imageOps
-	}
-
-	scaleImage := func(pixelSize int, imageOps *ebiten.DrawImageOptions) *ebiten.DrawImageOptions {
-		/*
-		 Scale the image to the desired size.
-
-		 :param image: the image to be rescaled
-		 :param pixelSize: the size of the pixel
-		 :return: the rescaled image
-		*/
-
-		scaleX := float64(pixelSize) / float64(width)
-		scaleY := float64(pixelSize) / float64(height)
-
-		imageOps.GeoM.Scale(scaleX, scaleY)
-		imageOps.GeoM.Translate(float64(x), float64(y))
-
-		return imageOps
-	}
-
 	op := &ebiten.DrawImageOptions{}
 
-	op = scaleImage(pixelSize, op)
+	// // Calculate scale factors
+	scaleX := float64(pixelSize) / float64(width)
+	scaleY := float64(pixelSize) / float64(height)
 
-	if rotation != 0 {
-		op = rotateImage(rotation, op)
-	}
+	// Set up the translation to position the image
+	op.GeoM.Translate(float64(-width)/2, float64(-height)/2) // Center it first
+	op.GeoM.Rotate(rotation)                                 // Rotate around the center
+	op.GeoM.Translate(float64(width)/2, float64(height)/2)   // Translate back to the top-left corner
+	op.GeoM.Scale(scaleX, scaleY)                            // Apply scaling
+	op.GeoM.Translate(float64(x), float64(y))                // Move to the desired position
 
 	return op
+}
+
+func ImageLoader(filepath string) *ebiten.Image {
+	/*
+	 Load the image from the given file path.
+
+	 This function is also responsible for logging any errors that might occur.
+
+	 :param filepath: the path to the image file
+	 :return: the image
+	*/
+
+	image, _, err := ebitenutil.NewImageFromFile(filepath)
+
+	if err != nil {
+		log.Fatalf("could not read the image file: %v", err)
+	}
+
+	return image
 }
