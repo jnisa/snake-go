@@ -12,7 +12,7 @@ const (
 )
 
 type Board struct {
-	Cells [32][32]int
+	Cells [22][22]int
 	Food  []int
 }
 

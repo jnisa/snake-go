@@ -31,6 +31,24 @@ func UpdateSnake(snake *objects.Snake) {
 	 :return: the snake updated
 	*/
 
+	removeIndex := func(index int, list []map[string]interface{}) []map[string]interface{} {
+		/*
+		 Remove an element from a list of elements from a given index.
+
+		 If the index provided is out of bounds, then the list will be returned as is.
+
+		 :param index: index of the element to be removed
+		 :param list: list of elements
+		 :return: list of elements with the element removed
+		*/
+
+		if index < 0 || index >= len(list) {
+			return list
+		} else {
+			return append(list[:index], list[index+1:]...)
+		}
+	}
+
 	isTurningPointOutFunc := func(snake *objects.Snake) {
 		/*
 		 Check if the turning points are still part of the snake's body.
@@ -44,12 +62,12 @@ func UpdateSnake(snake *objects.Snake) {
 		 :return: the snake updated
 		*/
 
-		for _, turningPoint := range snake.TurningPoints {
+		for idx, turningPoint := range snake.TurningPoints {
 
 			turningPointPosition := turningPoint["position"].([]int)
 
 			if !auxiliars.IsIn(turningPointPosition, snake.Body) {
-				snake.TurningPoints = snake.TurningPoints[1:]
+				snake.TurningPoints = removeIndex(idx, snake.TurningPoints)
 			}
 		}
 	}

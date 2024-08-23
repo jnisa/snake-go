@@ -31,11 +31,11 @@ import (
 )
 
 const (
-	ScreenWidth  = 640
-	ScreenHeight = 640
-	BoardHeight  = 32
-	boardWidth   = 32
-	CellSize     = 20
+	ScreenWidth  = 550
+	ScreenHeight = 550
+	BoardHeight  = 22
+	boardWidth   = 22
+	CellSize     = 25
 )
 
 type GameState int
@@ -47,27 +47,24 @@ const (
 )
 
 type Game struct {
-	board              objects.Board
-	snake              objects.Snake
-	lastUpdate         time.Time
-	state              GameState
-	foodImage          *ebiten.Image
-	snakeHead          *ebiten.Image
-	snakeTail          *ebiten.Image
-	snakeVerticalRight *ebiten.Image
+	board          objects.Board
+	snake          objects.Snake
+	lastUpdate     time.Time
+	state          GameState
+	foodImage      *ebiten.Image
+	snakeHead      *ebiten.Image
+	snakeTail      *ebiten.Image
+	curveSnakeBody *ebiten.Image
+	snakeBody      *ebiten.Image
 }
 
 var (
-	apple *ebiten.Image = game.ImageLoader("snake_elements/apple.png")
-	tail  *ebiten.Image = game.ImageLoader("snake_elements/tail.png")
-	head  *ebiten.Image = game.ImageLoader("snake_elements/head.png")
-	// straight       *ebiten.Image = game.ImageLoader("snake_elements/straight.png")
-	verticalRight *ebiten.Image = game.ImageLoader("snake_elements/curve_1.png")
-	// verticalLeft   *ebiten.Image = game.ImageLoader("snake_elements/curve_2.png")
-	// horizontalDown *ebiten.Image = game.ImageLoader("snake_elements/curve_3.png")
-	// horizontalUp   *ebiten.Image = game.ImageLoader("snake_elements/curve_4.png")
+	apple     *ebiten.Image = game.ImageLoader("snake_elements/apple.png")
+	tail      *ebiten.Image = game.ImageLoader("snake_elements/tail.png")
+	head      *ebiten.Image = game.ImageLoader("snake_elements/head.png")
+	curveBody *ebiten.Image = game.ImageLoader("snake_elements/curve_body.png")
+	body      *ebiten.Image = game.ImageLoader("snake_elements/straight.png")
 
-	// TODO. these variables are going to be used for the tail and head of the snake
 	Down  float64 = math.Pi / 2
 	Up    float64 = -math.Pi / 2
 	Right float64 = 0
@@ -179,9 +176,6 @@ func (g *Game) DrawBoard(screen *ebiten.Image) {
 	}
 }
 
-// TODO. the snake is currently a set of pixels and should leverage images
-// TODO. this function needs some fine tunning to accomodate the images
-// TODO. don't forget to ROTATE the images depending on the direction of the snake
 func (g *Game) DrawSnake(screen *ebiten.Image) {
 	/*
 	 Render the snake on the board game.
@@ -194,29 +188,75 @@ func (g *Game) DrawSnake(screen *ebiten.Image) {
 
 		switch idx {
 		case 0:
-			imageOperations := game.AdjustImage(g.snakeHead, x, y, CellSize, math.Pi/2)
-			screen.DrawImage(g.snakeHead, imageOperations)
+			// TODO. not sure if it's possible to improve this bit of code otherwise it's going to be massive
+			switch g.snake.Direction {
+			case objects.Up:
+				imageOperations := game.AdjustImage(g.snakeHead, x, y, CellSize, Up)
+				screen.DrawImage(g.snakeHead, imageOperations)
+			case objects.Down:
+				imageOperations := game.AdjustImage(g.snakeHead, x, y, CellSize, Down)
+				screen.DrawImage(g.snakeHead, imageOperations)
+			case objects.Left:
+				imageOperations := game.AdjustImage(g.snakeHead, x, y, CellSize, Left)
+				screen.DrawImage(g.snakeHead, imageOperations)
+			case objects.Right:
+				imageOperations := game.AdjustImage(g.snakeHead, x, y, CellSize, Right)
+				screen.DrawImage(g.snakeHead, imageOperations)
+			}
 		case len(g.snake.Body) - 1:
-			imageOperations := game.AdjustImage(g.snakeTail, x, y, CellSize, math.Pi/2)
-			// imageOperations := game.AdjustImage(g.snakeTail, x, y, CellSize, 90)
-			screen.DrawImage(g.snakeTail, imageOperations)
+			if len(g.snake.TurningPoints) != 0 {
+				tailDirection := g.snake.TurningPoints[0]["previous_direction"]
+				switch tailDirection {
+				case objects.Up:
+					imageOperations := game.AdjustImage(g.snakeTail, x, y, CellSize, Up)
+					screen.DrawImage(g.snakeTail, imageOperations)
+				case objects.Down:
+					imageOperations := game.AdjustImage(g.snakeTail, x, y, CellSize, Down)
+					screen.DrawImage(g.snakeTail, imageOperations)
+				case objects.Left:
+					imageOperations := game.AdjustImage(g.snakeTail, x, y, CellSize, Left)
+					screen.DrawImage(g.snakeTail, imageOperations)
+				case objects.Right:
+					imageOperations := game.AdjustImage(g.snakeTail, x, y, CellSize, Right)
+					screen.DrawImage(g.snakeTail, imageOperations)
+				}
+			} else {
+				switch g.snake.Direction {
+				case objects.Up:
+					imageOperations := game.AdjustImage(g.snakeTail, x, y, CellSize, Up)
+					screen.DrawImage(g.snakeTail, imageOperations)
+				case objects.Down:
+					imageOperations := game.AdjustImage(g.snakeTail, x, y, CellSize, Down)
+					screen.DrawImage(g.snakeTail, imageOperations)
+				case objects.Left:
+					imageOperations := game.AdjustImage(g.snakeTail, x, y, CellSize, Left)
+					screen.DrawImage(g.snakeTail, imageOperations)
+				case objects.Right:
+					imageOperations := game.AdjustImage(g.snakeTail, x, y, CellSize, Right)
+					screen.DrawImage(g.snakeTail, imageOperations)
+				}
+			}
 		default:
 			for idx, point := range g.snake.TurningPoints {
 				if reflect.DeepEqual(coord, point["position"]) {
 					switch {
+					// TODO. validate the following lines of code
 					case g.snake.TurningPoints[idx]["previous_direction"] == objects.Down && g.snake.TurningPoints[idx]["current_direction"] == objects.Right:
-						imageOperations := game.AdjustImage(g.snakeVerticalRight, x, y, CellSize, 0)
-						screen.DrawImage(g.snakeVerticalRight, imageOperations)
+						imageOperations := game.AdjustImage(g.curveSnakeBody, x, y, CellSize, 0)
+						screen.DrawImage(g.curveSnakeBody, imageOperations)
+					case g.snake.TurningPoints[idx]["previous_direction"] == objects.Left && g.snake.TurningPoints[idx]["current_direction"] == objects.Up:
+						imageOperations := game.AdjustImage(g.curveSnakeBody, x, y, CellSize, 0)
+						screen.DrawImage(g.curveSnakeBody, imageOperations)
+					case g.snake.TurningPoints[idx]["previous_direction"] == objects.Up && g.snake.TurningPoints[idx]["current_direction"] == objects.Left:
+						imageOperations := game.AdjustImage(g.curveSnakeBody, x, y, CellSize, math.Pi)
+						screen.DrawImage(g.curveSnakeBody, imageOperations)
+					case g.snake.TurningPoints[idx]["previous_direction"] == objects.Right && g.snake.TurningPoints[idx]["current_direction"] == objects.Down:
+						imageOperations := game.AdjustImage(g.curveSnakeBody, x, y, CellSize, 0)
+						screen.DrawImage(g.curveSnakeBody, imageOperations)
 					}
 				} else {
-					ebitenutil.DrawRect(
-						screen,
-						float64(x),
-						float64(y),
-						CellSize,
-						CellSize,
-						color.RGBA{255, 0, 0, 255},
-					)
+					imageOperations := game.AdjustImage(g.snakeBody, x, y, CellSize, 0)
+					screen.DrawImage(g.snakeBody, imageOperations)
 				}
 			}
 		}
@@ -292,10 +332,11 @@ func main() {
 			Direction: objects.Right,
 			Score:     0,
 		},
-		foodImage:          apple,
-		snakeHead:          head,
-		snakeTail:          tail,
-		snakeVerticalRight: verticalRight,
+		foodImage:      apple,
+		snakeHead:      head,
+		snakeTail:      tail,
+		curveSnakeBody: curveBody,
+		snakeBody:      body,
 	}
 
 	ebiten.SetWindowSize(ScreenWidth, ScreenHeight)
