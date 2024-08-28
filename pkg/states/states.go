@@ -97,13 +97,13 @@ func SnakeIngestionUpdate(snake *objects.Snake, board *objects.Board) {
 
 		switch snakeDirection {
 		case objects.Up:
-			snake.Body = append(snake.Body, []int{snakeTail[0], snakeTail[1] - 1})
+			snake.Body = append(snake.Body, [2]int{snakeTail[0], snakeTail[1] - 1})
 		case objects.Down:
-			snake.Body = append(snake.Body, []int{snakeTail[0], snakeTail[1] + 1})
+			snake.Body = append(snake.Body, [2]int{snakeTail[0], snakeTail[1] + 1})
 		case objects.Left:
-			snake.Body = append(snake.Body, []int{snakeTail[0] - 1, snakeTail[1]})
+			snake.Body = append(snake.Body, [2]int{snakeTail[0] - 1, snakeTail[1]})
 		case objects.Right:
-			snake.Body = append(snake.Body, []int{snakeTail[0] + 1, snakeTail[1]})
+			snake.Body = append(snake.Body, [2]int{snakeTail[0] + 1, snakeTail[1]})
 		}
 	}
 

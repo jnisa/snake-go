@@ -20,7 +20,7 @@ type Board struct {
 // the turning points to each the images will be applied to
 type Snake struct {
 	Direction     Direction
-	Body          [][]int
+	Body          [][2]int
 	Score         int
 	TurningPoints []map[string]interface{}
 }

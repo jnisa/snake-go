@@ -32,7 +32,7 @@ func TestGetRandomPositionBasic(t *testing.T) {
 	*/
 
 	test_snake := objects.Snake{
-		Body:      [][]int{{1, 1}},
+		Body:      [][2]int{{1, 1}},
 		Direction: objects.Up,
 	}
 
@@ -50,7 +50,7 @@ func TestGetRandomPositionException(t *testing.T) {
 	*/
 
 	test_snake := objects.Snake{
-		Body:      [][]int{},
+		Body:      [][2]int{},
 		Direction: objects.Up,
 	}
 	var test_board objects.Board
@@ -65,7 +65,7 @@ func TestRemoveDuplicatesBasic(t *testing.T) {
 	 Remove duplicates from a list of elements.
 	*/
 
-	test_elements := [][]int{
+	test_elements := [][2]int{
 		{1, 1}, {1, 1}, {1, 2},
 		{1, 2}, {1, 3}, {1, 3},
 	}
@@ -81,7 +81,7 @@ func TestRemoveDuplicatesException(t *testing.T) {
 	 When an empty list is provided.
 	*/
 
-	test_elements := [][]int{}
+	test_elements := [][2]int{}
 
 	actual := auxiliars.RemoveDuplicates(test_elements)
 	expected := [][]int{}
@@ -97,10 +97,10 @@ func TestIsIn(t *testing.T) {
 	  3. when the nested list is empty.
 	*/
 
-	var empty_list [][]int
-	non_empty_lst := [][]int{{1, 2}, {3, 4}, {5, 6}}
+	var empty_list [][2]int
+	non_empty_lst := [][2]int{{1, 2}, {3, 4}, {5, 6}}
 
-	assert.True(t, auxiliars.IsIn([]int{1, 2}, non_empty_lst))
-	assert.False(t, auxiliars.IsIn([]int{1, 1}, non_empty_lst))
-	assert.False(t, auxiliars.IsIn([]int{1, 1}, empty_list))
+	assert.True(t, auxiliars.IsIn([2]int{1, 2}, non_empty_lst))
+	assert.False(t, auxiliars.IsIn([2]int{1, 1}, non_empty_lst))
+	assert.False(t, auxiliars.IsIn([2]int{1, 1}, empty_list))
 }

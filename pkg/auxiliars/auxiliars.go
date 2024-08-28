@@ -52,7 +52,7 @@ func GetRandomPosition(snake objects.Snake, board objects.Board) (int, int) {
 	return x, y
 }
 
-func RemoveDuplicates(elements [][]int) [][]int {
+func RemoveDuplicates(elements [][2]int) [][2]int {
 	/*
 	 Remove duplicates from a list of elements.
 
@@ -64,7 +64,7 @@ func RemoveDuplicates(elements [][]int) [][]int {
 	 :return [][]int: list of elements without duplicates
 	*/
 
-	contains := func(list [][]int, element []int) bool {
+	contains := func(list [][2]int, element [2]int) bool {
 		/*
 		 Check if the list of elements contains the given element.
 
@@ -82,7 +82,7 @@ func RemoveDuplicates(elements [][]int) [][]int {
 		return false
 	}
 
-	non_duplicates := [][]int{}
+	non_duplicates := [][2]int{}
 
 	for _, element := range elements {
 		if !contains(non_duplicates, element) {
@@ -93,7 +93,7 @@ func RemoveDuplicates(elements [][]int) [][]int {
 	return non_duplicates
 }
 
-func IsIn(targetValue []int, searchingList [][]int) bool {
+func IsIn(targetValue [2]int, searchingList [][2]int) bool {
 	/*
 	 Function that evaluates if a given list is present in a given nested list.
 

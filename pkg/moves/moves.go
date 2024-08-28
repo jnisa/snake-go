@@ -64,7 +64,7 @@ func UpdateSnake(snake *objects.Snake) {
 
 		for idx, turningPoint := range snake.TurningPoints {
 
-			turningPointPosition := turningPoint["position"].([]int)
+			turningPointPosition := turningPoint["position"].([2]int)
 
 			if !auxiliars.IsIn(turningPointPosition, snake.Body) {
 				snake.TurningPoints = removeIndex(idx, snake.TurningPoints)
@@ -72,23 +72,31 @@ func UpdateSnake(snake *objects.Snake) {
 		}
 	}
 
-	var newCoordinate [][]int
+	var newCoordinate [][2]int
 
 	switch snake.Direction {
 	case objects.Up:
-		newCoordinate = [][]int{{snake.Body[0][0], snake.Body[0][1] - 1}}
+		newCoordinate = [][2]int{{snake.Body[0][0], snake.Body[0][1] - 1}}
 	case objects.Down:
-		newCoordinate = [][]int{{snake.Body[0][0], snake.Body[0][1] + 1}}
+		newCoordinate = [][2]int{{snake.Body[0][0], snake.Body[0][1] + 1}}
 	case objects.Left:
-		newCoordinate = [][]int{{snake.Body[0][0] - 1, snake.Body[0][1]}}
+		newCoordinate = [][2]int{{snake.Body[0][0] - 1, snake.Body[0][1]}}
 	case objects.Right:
-		newCoordinate = [][]int{{snake.Body[0][0] + 1, snake.Body[0][1]}}
+		newCoordinate = [][2]int{{snake.Body[0][0] + 1, snake.Body[0][1]}}
 	}
 
 	snake.Body = append(newCoordinate, snake.Body...)
 	snake.Body = snake.Body[:len(snake.Body)-1]
 
 	isTurningPointOutFunc(snake)
+
+	// Just for testing purposes remove afterwards
+	// fmt.Println("Number of turning points: ", len(snake.TurningPoints))
+	// for _, turningPoint := range snake.TurningPoints {
+	// 	if point, ok := turningPoint["position"].([]int); ok {
+	// 		fmt.Println(point)
+	// 	}
+	// }
 }
 
 func MoveRight(snake *objects.Snake) {
@@ -118,7 +126,7 @@ func MoveRight(snake *objects.Snake) {
 
 		// remove the last position of the snake
 		snake.Body = snake.Body[:len(snake.Body)-1]
-		snake.Body = append([][]int{{snakeHead[0] + 1, snakeHead[1]}}, snake.Body...)
+		snake.Body = append([][2]int{{snakeHead[0] + 1, snakeHead[1]}}, snake.Body...)
 
 		// add the head to the turning points list
 		snake.TurningPoints = append(snake.TurningPoints, map[string]interface{}{
@@ -159,7 +167,7 @@ func MoveLeft(snake *objects.Snake) {
 
 		// remove the last position of the snake
 		snake.Body = snake.Body[:len(snake.Body)-1]
-		snake.Body = append([][]int{{snakeHead[0] - 1, snakeHead[1]}}, snake.Body...)
+		snake.Body = append([][2]int{{snakeHead[0] - 1, snakeHead[1]}}, snake.Body...)
 
 		// add the head to the turning points list
 		snake.TurningPoints = append(snake.TurningPoints, map[string]interface{}{
@@ -200,7 +208,7 @@ func MoveUp(snake *objects.Snake) {
 
 		// remove the last position of the snake
 		snake.Body = snake.Body[:len(snake.Body)-1]
-		snake.Body = append([][]int{{snakeHead[0], snakeHead[1] - 1}}, snake.Body...)
+		snake.Body = append([][2]int{{snakeHead[0], snakeHead[1] - 1}}, snake.Body...)
 
 		// add the head to the turning points list
 		snake.TurningPoints = append(snake.TurningPoints, map[string]interface{}{
@@ -241,7 +249,7 @@ func MoveDown(snake *objects.Snake) {
 
 		// remove the last position of the snake
 		snake.Body = snake.Body[:len(snake.Body)-1]
-		snake.Body = append([][]int{{snakeHead[0], snakeHead[1] + 1}}, snake.Body...)
+		snake.Body = append([][2]int{{snakeHead[0], snakeHead[1] + 1}}, snake.Body...)
 
 		// add the head to the turning points list
 		snake.TurningPoints = append(snake.TurningPoints, map[string]interface{}{

@@ -20,11 +20,11 @@ func TestIsGameOverBasic(t *testing.T) {
 	var test_board objects.Board
 
 	test_snake_limits := objects.Snake{
-		Body:      [][]int{{-1, 0}, {0, 0}, {0, 1}},
+		Body:      [][2]int{{-1, 0}, {0, 0}, {0, 1}},
 		Direction: objects.Left,
 	}
 	test_snake_bite := objects.Snake{
-		Body:      [][]int{{0, 0}, {0, 1}, {0, 0}},
+		Body:      [][2]int{{0, 0}, {0, 1}, {0, 0}},
 		Direction: objects.Down,
 	}
 
@@ -40,7 +40,7 @@ func TestIsGameOverAdvanced(t *testing.T) {
 
 	var test_board objects.Board
 	test_snake := objects.Snake{
-		Body:      [][]int{{9, 10}, {10, 10}, {11, 10}},
+		Body:      [][2]int{{9, 10}, {10, 10}, {11, 10}},
 		Direction: objects.Left,
 	}
 
@@ -59,7 +59,7 @@ func TestSnakeIngestionUpdate_Up(t *testing.T) {
 
 	var actual_board objects.Board
 	actual_snake := objects.Snake{
-		Body:      [][]int{{10, 11}, {10, 10}, {10, 9}},
+		Body:      [][2]int{{10, 11}, {10, 10}, {10, 9}},
 		Direction: objects.Up,
 		Score:     0,
 	}
@@ -69,7 +69,7 @@ func TestSnakeIngestionUpdate_Up(t *testing.T) {
 
 	states.SnakeIngestionUpdate(&actual_snake, &actual_board)
 	expected_snake := objects.Snake{
-		Body:      [][]int{{10, 11}, {10, 10}, {10, 9}, {10, 8}},
+		Body:      [][2]int{{10, 11}, {10, 10}, {10, 9}, {10, 8}},
 		Direction: objects.Up,
 		Score:     1,
 	}
