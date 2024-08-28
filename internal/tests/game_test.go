@@ -64,7 +64,7 @@ var (
 	}{
 		{10, 9}:  {Direction: objects.Down, Image: "head"},
 		{10, 10}: {Direction: objects.Down, Image: "body"},
-		{10, 11}: {Direction: objects.Left, Image: "curveBody"},
+		{10, 11}: {Direction: objects.Down, Image: "curveBody"},
 		{11, 11}: {Direction: objects.Left, Image: "body"},
 		{12, 11}: {Direction: objects.Left, Image: "tail"},
 	}
@@ -75,9 +75,9 @@ var (
 	}{
 		{10, 9}:  {Direction: objects.Down, Image: "head"},
 		{10, 10}: {Direction: objects.Down, Image: "body"},
-		{10, 11}: {Direction: objects.Left, Image: "curveBody"},
+		{10, 11}: {Direction: objects.Down, Image: "curveBody"},
 		{11, 11}: {Direction: objects.Left, Image: "body"},
-		{12, 11}: {Direction: objects.Up, Image: "curveBody"},
+		{12, 11}: {Direction: objects.Left, Image: "curveBody"},
 		{12, 10}: {Direction: objects.Up, Image: "body"},
 		{12, 9}:  {Direction: objects.Up, Image: "tail"},
 	}

@@ -1,13 +1,5 @@
 // Script containing all the functions affecting the dynamics of the game
 
-//////////////////////////////////////////////////////////////////////////
-// --TODO--
-// There's a few things to do on this script:
-// 1. Add a description to the functions
-// 2. Reallocate some of the functions into a game dedicated script
-// 3. Add a few more functions to the game script
-//////////////////////////////////////////////////////////////////////////
-
 package main
 
 import (
@@ -91,8 +83,6 @@ func (g *Game) Update() error {
 
 	now := time.Now()
 
-	// TODO. change the values that is multiplied by the time.Millisecond
-	// depending on the level of the game
 	if now.Sub(g.lastUpdate) >= time.Millisecond*100 {
 		switch {
 		case ebiten.IsKeyPressed(ebiten.KeyArrowLeft):
@@ -185,6 +175,11 @@ func (g *Game) DrawSnake(screen *ebiten.Image) {
 
 	 :param screen: the screen on which to draw the snake.
 	*/
+
+	// TODO. Debug why sometimes there's pixels with no image
+	if len(game.GetSnakeParts(g.snake)) < len(g.snake.Body) {
+		fmt.Println("Something is wrong")
+	}
 
 	for coord, features := range game.GetSnakeParts(g.snake) {
 

@@ -7,18 +7,6 @@ import (
 	"github.com/jnisa/snake-go/pkg/objects"
 )
 
-// probably add this to the main script
-// var SnakeImages map[string]*ebiten.Image
-
-// func init() {
-// 	SnakeImages = map[string]*ebiten.Image{
-// 		"tail":      ImageLoader("snake_elements/tail.png"),
-// 		"head":      ImageLoader("snake_elements/head.png"),
-// 		"curveBody": ImageLoader("snake_elements/curve_body.png"),
-// 		"body":      ImageLoader("snake_elements/straight.png"),
-// 	}
-// }
-
 func GetSnakeParts(snake objects.Snake) map[[2]int]struct {
 	Direction objects.Direction
 	Image     string
@@ -75,7 +63,8 @@ func GetSnakeParts(snake objects.Snake) map[[2]int]struct {
 		image string,
 	) {
 		/*
-		 Append a new body part to the response map.
+		 Append a new body part to the response map which will be the output of the
+		 parent function.
 
 		 :param direction: direction of the current part
 		 :param coord: coordinate of the current part
@@ -123,17 +112,17 @@ func GetSnakeParts(snake objects.Snake) map[[2]int]struct {
 
 				switch {
 				case previous_direction == objects.Down && current_direction == objects.Right:
-					responseAppender(response, objects.Down, coord, "curveBody")
-				case previous_direction == objects.Down && current_direction == objects.Left:
-					responseAppender(response, objects.Left, coord, "curveBody")
-				case previous_direction == objects.Left && current_direction == objects.Up:
-					responseAppender(response, objects.Up, coord, "curveBody")
-				case previous_direction == objects.Left && current_direction == objects.Down:
-					responseAppender(response, objects.Left, coord, "curveBody")
-				case previous_direction == objects.Up && current_direction == objects.Left:
-					responseAppender(response, objects.Up, coord, "curveBody")
-				case previous_direction == objects.Up && current_direction == objects.Right:
 					responseAppender(response, objects.Right, coord, "curveBody")
+				case previous_direction == objects.Down && current_direction == objects.Left:
+					responseAppender(response, objects.Up, coord, "curveBody")
+				case previous_direction == objects.Left && current_direction == objects.Up:
+					responseAppender(response, objects.Right, coord, "curveBody")
+				case previous_direction == objects.Left && current_direction == objects.Down:
+					responseAppender(response, objects.Down, coord, "curveBody")
+				case previous_direction == objects.Up && current_direction == objects.Left:
+					responseAppender(response, objects.Left, coord, "curveBody")
+				case previous_direction == objects.Up && current_direction == objects.Right:
+					responseAppender(response, objects.Down, coord, "curveBody")
 				case previous_direction == objects.Right && current_direction == objects.Down:
 					responseAppender(response, objects.Left, coord, "curveBody")
 				case previous_direction == objects.Right && current_direction == objects.Up:

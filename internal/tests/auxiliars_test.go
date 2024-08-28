@@ -71,7 +71,7 @@ func TestRemoveDuplicatesBasic(t *testing.T) {
 	}
 
 	actual := auxiliars.RemoveDuplicates(test_elements)
-	expected := [][]int{{1, 1}, {1, 2}, {1, 3}}
+	expected := [][2]int{{1, 1}, {1, 2}, {1, 3}}
 
 	assert.Equal(t, expected, actual)
 }
@@ -84,7 +84,7 @@ func TestRemoveDuplicatesException(t *testing.T) {
 	test_elements := [][2]int{}
 
 	actual := auxiliars.RemoveDuplicates(test_elements)
-	expected := [][]int{}
+	expected := [][2]int{}
 
 	assert.Equal(t, actual, expected)
 }
