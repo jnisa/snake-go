@@ -7,6 +7,7 @@ import (
 	"image/color"
 	_ "image/png" // Register PNG format
 	"math"
+	"sync"
 	"time"
 
 	"github.com/hajimehoshi/ebiten/v2"
@@ -42,6 +43,7 @@ type Game struct {
 	snake      objects.Snake
 	lastUpdate time.Time
 	state      GameState
+	snakeMutex sync.RWMutex
 }
 
 var (
@@ -68,10 +70,10 @@ var imageMap map[string]*ebiten.Image = map[string]*ebiten.Image{
 
 func (g *Game) Update() error {
 	/*
-	 Function that will update the board game whenever there's a key pressed by the
-	 user.
+		Function that will update the board game whenever there's a key pressed by the
+		user.
 
-	 :param g: current game state
+		:param g: current game state
 	*/
 
 	if g.state == StateStartScreen {
@@ -84,6 +86,10 @@ func (g *Game) Update() error {
 	now := time.Now()
 
 	if now.Sub(g.lastUpdate) >= time.Millisecond*100 {
+
+		g.snakeMutex.Lock()
+		defer g.snakeMutex.Unlock()
+
 		switch {
 		case ebiten.IsKeyPressed(ebiten.KeyArrowLeft):
 			moves.MoveLeft(&g.snake)
@@ -176,7 +182,10 @@ func (g *Game) DrawSnake(screen *ebiten.Image) {
 	 :param screen: the screen on which to draw the snake.
 	*/
 
-	// TODO. Debug why sometimes there's pixels with no image
+	g.snakeMutex.RLock()
+	defer g.snakeMutex.RUnlock()
+
+	// TODO. Error mentioned on the documentation - this print proves it
 	if len(game.GetSnakeParts(g.snake)) < len(g.snake.Body) {
 		fmt.Println("Something is wrong")
 	}
@@ -217,7 +226,6 @@ func (g *Game) DrawFood(screen *ebiten.Image) {
 	}
 }
 
-// TODO. change the current font to something more arcade looking
 func (g *Game) DrawStartScreen(screen *ebiten.Image) {
 	/*
 	 Render the start screen.
@@ -236,7 +244,6 @@ func (g *Game) DrawStartScreen(screen *ebiten.Image) {
 	text.Draw(screen, msg, basicfont.Face7x13, x, y, color.White)
 }
 
-// TODO. change the current font to something more arcade looking
 func (g *Game) DrawGameOverScreen(screen *ebiten.Image) {
 	/*
 	 Render the Game Over screen.

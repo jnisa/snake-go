@@ -16,8 +16,6 @@ type Board struct {
 	Food  []int
 }
 
-// TODO. the snake must have a list of maps to collect all
-// the turning points to each the images will be applied to
 type Snake struct {
 	Direction     Direction
 	Body          [][2]int

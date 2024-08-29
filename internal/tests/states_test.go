@@ -50,8 +50,6 @@ func TestIsGameOverAdvanced(t *testing.T) {
 
 }
 
-// TODO. check if the documentation needs to be updated afterwards
-// TODO. add more tests later
 func TestSnakeIngestionUpdate_Up(t *testing.T) {
 	/*
 	 Test the SnakeIngestionUpdate function - when the snake is moving up.

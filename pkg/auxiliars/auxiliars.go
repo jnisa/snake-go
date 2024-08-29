@@ -10,23 +10,6 @@ import (
 	"github.com/jnisa/snake-go/pkg/objects"
 )
 
-func Get(x, y int, board objects.Board) int {
-	/*
-	 Get the value of the board at the given position.
-
-	 :param board: matrix representing the board
-	 :param x: x coordinate
-	 :param y: y coordinate
-	 :return int: value of the board at the given position
-	*/
-
-	if x < 0 || x >= len(board.Cells) || y < 0 || y >= len(board.Cells[0]) {
-		return -1
-	}
-
-	return board.Cells[x][y]
-}
-
 func GetRandomPosition(snake objects.Snake, board objects.Board) (int, int) {
 	/*
 	 Get a random position in the board.

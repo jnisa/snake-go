@@ -10,45 +10,52 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// TODO. split this tests into multiple tests
 func TestUpdateSnakeBasic(t *testing.T) {
 	/*
-	 Test the UpdateSnake function when:
-	   1. the snake is moving to the right;
-	   2. the snake is moving to the up;
+		Test the UpdateSnake function when:
+		1. the snake is moving to the right;
+		2. the snake is moving to the up;
 	*/
 
-	actual_snake_vertical := objects.Snake{
-		Body:      [][2]int{{0, 1}, {0, 2}, {0, 3}},
-		Direction: objects.Up,
-		TurningPoints: []map[string]interface{}{
-			{
-				"position":           [2]int{0, 3},
-				"previous_direction": objects.Down,
-				"current_direction":  objects.Up,
+	// Variables containing the test snakes.
+	var (
+		test_snake_1 = objects.Snake{
+			Body:      [][2]int{{0, 1}, {0, 2}, {0, 3}},
+			Direction: objects.Up,
+			TurningPoints: []map[string]interface{}{
+				{
+					"position":           [2]int{0, 3},
+					"previous_direction": objects.Down,
+					"current_direction":  objects.Up,
+				},
 			},
-		},
-	}
-	actual_snake_horizontal := objects.Snake{
-		Body:      [][2]int{{4, 3}, {3, 3}, {3, 2}},
-		Direction: objects.Right,
-	}
+		}
 
-	moves.UpdateSnake(&actual_snake_vertical)
-	moves.UpdateSnake(&actual_snake_horizontal)
+		test_snake_2 = objects.Snake{
+			Body:      [][2]int{{4, 3}, {3, 3}, {3, 2}},
+			Direction: objects.Right,
+		}
+	)
 
-	expected_snake_vertical := objects.Snake{
-		Body:          [][2]int{{0, 0}, {0, 1}, {0, 2}},
-		Direction:     objects.Up,
-		TurningPoints: []map[string]interface{}{},
-	}
-	expected_snake_horizontal := objects.Snake{
-		Body:      [][2]int{{5, 3}, {4, 3}, {3, 3}},
-		Direction: objects.Right,
-	}
+	// Variables containing the expected snakes.
+	var (
+		expected_snake_1 = objects.Snake{
+			Body:          [][2]int{{0, 0}, {0, 1}, {0, 2}},
+			Direction:     objects.Up,
+			TurningPoints: []map[string]interface{}{},
+		}
 
-	assert.Equal(t, expected_snake_vertical, actual_snake_vertical)
-	assert.Equal(t, expected_snake_horizontal, actual_snake_horizontal)
+		expected_snake_2 = objects.Snake{
+			Body:      [][2]int{{5, 3}, {4, 3}, {3, 3}},
+			Direction: objects.Right,
+		}
+	)
+
+	moves.UpdateSnake(&test_snake_1)
+	moves.UpdateSnake(&test_snake_2)
+
+	assert.Equal(t, expected_snake_1, test_snake_1)
+	assert.Equal(t, expected_snake_2, test_snake_2)
 }
 
 func TestMoveRight_basic(t *testing.T) {

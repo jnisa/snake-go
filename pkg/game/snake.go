@@ -1,4 +1,4 @@
-// // Script that will contain game operations around the snake
+// Script that will contain game operations around the snake
 
 package game
 
@@ -6,6 +6,26 @@ import (
 	"github.com/jnisa/snake-go/pkg/auxiliars"
 	"github.com/jnisa/snake-go/pkg/objects"
 )
+
+type turnKey struct {
+	prev, curr objects.Direction
+}
+
+var turnCombinations = map[turnKey]objects.Direction{
+	/*
+	 Variable containing all the possible movements that can be exectured by
+	 the snake.
+	*/
+
+	{objects.Down, objects.Right}: objects.Right,
+	{objects.Down, objects.Left}:  objects.Up,
+	{objects.Left, objects.Up}:    objects.Right,
+	{objects.Left, objects.Down}:  objects.Down,
+	{objects.Up, objects.Left}:    objects.Left,
+	{objects.Up, objects.Right}:   objects.Down,
+	{objects.Right, objects.Down}: objects.Left,
+	{objects.Right, objects.Up}:   objects.Up,
+}
 
 func GetSnakeParts(snake objects.Snake) map[[2]int]struct {
 	Direction objects.Direction
@@ -16,10 +36,15 @@ func GetSnakeParts(snake objects.Snake) map[[2]int]struct {
 	 compose the snake's body and it's direction so we can adjust the snake's body
 	 rendering accordingly.
 
-	 ADD A CLEAR DESCRIPTION OF THE OPERATIONS THAT ARE BEING PERFORMED HERE
+	 The response of this function will be map that will have the snake's body coordinates
+	 as keys and a struct composed by the direction of such body part and the image that
+	 must be rendered for such body part.
+
+	 To ease the process of appending new body parts to the response map, a nested function
+	 is defined and passed as argument to the current function.
 
 	 :param snake: list of the snake's body
-	 :return: map with the snake's body parts and it's directions
+	 :return: map with the snake's body parts and its direction and image
 	*/
 
 	getTurningPointsList := func(snake objects.Snake) [][2]int {
@@ -89,8 +114,8 @@ func GetSnakeParts(snake objects.Snake) map[[2]int]struct {
 	})
 
 	for idx, coord := range snake.Body {
-		// snake's head
 		if idx == 0 {
+			// snake's head
 			responseAppender(response, snake.Direction, coord, "head")
 			currentDirection = snake.Direction
 		} else if idx == len(snake.Body)-1 {
@@ -110,23 +135,10 @@ func GetSnakeParts(snake objects.Snake) map[[2]int]struct {
 				previous_direction := snake.TurningPoints[len(snake.TurningPoints)+turningIndex]["previous_direction"]
 				current_direction := snake.TurningPoints[len(snake.TurningPoints)+turningIndex]["current_direction"]
 
-				switch {
-				case previous_direction == objects.Down && current_direction == objects.Right:
-					responseAppender(response, objects.Right, coord, "curveBody")
-				case previous_direction == objects.Down && current_direction == objects.Left:
-					responseAppender(response, objects.Up, coord, "curveBody")
-				case previous_direction == objects.Left && current_direction == objects.Up:
-					responseAppender(response, objects.Right, coord, "curveBody")
-				case previous_direction == objects.Left && current_direction == objects.Down:
-					responseAppender(response, objects.Down, coord, "curveBody")
-				case previous_direction == objects.Up && current_direction == objects.Left:
-					responseAppender(response, objects.Left, coord, "curveBody")
-				case previous_direction == objects.Up && current_direction == objects.Right:
-					responseAppender(response, objects.Down, coord, "curveBody")
-				case previous_direction == objects.Right && current_direction == objects.Down:
-					responseAppender(response, objects.Left, coord, "curveBody")
-				case previous_direction == objects.Right && current_direction == objects.Up:
-					responseAppender(response, objects.Up, coord, "curveBody")
+				if previous_direction, ok_prev := previous_direction.(objects.Direction); ok_prev {
+					if current_direction, ok_curr := current_direction.(objects.Direction); ok_curr {
+						responseAppender(response, turnCombinations[turnKey{previous_direction, current_direction}], coord, "curveBody")
+					}
 				}
 
 				if previous_direction, ok := snake.TurningPoints[len(snake.TurningPoints)+turningIndex]["previous_direction"].(objects.Direction); ok {

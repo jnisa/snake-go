@@ -11,13 +11,13 @@ import (
 )
 
 var (
-	noCurveSnake = objects.Snake{
+	test_snake_1 = objects.Snake{
 		Body:          [][2]int{{10, 9}, {10, 10}, {10, 11}, {10, 12}},
 		Direction:     objects.Down,
 		TurningPoints: []map[string]interface{}{},
 	}
 
-	oneCurveSnake = objects.Snake{
+	test_snake_2 = objects.Snake{
 		Body:      [][2]int{{10, 9}, {10, 10}, {10, 11}, {11, 11}, {12, 11}},
 		Direction: objects.Down,
 		TurningPoints: []map[string]interface{}{
@@ -29,7 +29,7 @@ var (
 		},
 	}
 
-	twoCurveSnake = objects.Snake{
+	test_snake_3 = objects.Snake{
 		Body:      [][2]int{{10, 9}, {10, 10}, {10, 11}, {11, 11}, {12, 11}, {12, 10}, {12, 9}},
 		Direction: objects.Down,
 		TurningPoints: []map[string]interface{}{
@@ -91,9 +91,9 @@ func TestGetSnakeTurningPoints(t *testing.T) {
 	 3. when the snake has two curves
 	*/
 
-	actual_1 := game.GetSnakeParts(noCurveSnake)
-	actual_2 := game.GetSnakeParts(oneCurveSnake)
-	actual_3 := game.GetSnakeParts(twoCurveSnake)
+	actual_1 := game.GetSnakeParts(test_snake_1)
+	actual_2 := game.GetSnakeParts(test_snake_2)
+	actual_3 := game.GetSnakeParts(test_snake_3)
 
 	assert.Equal(t, expected_1, actual_1)
 	assert.Equal(t, expected_2, actual_2)

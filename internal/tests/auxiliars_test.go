@@ -10,21 +10,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestGet(t *testing.T) {
-	/*
-	 Test the Get function when the coordinates provided are both within and outside the board.
-	*/
-
-	var test_board objects.Board
-
-	test_board.Cells[0][0] = 0
-	test_board.Cells[1][1] = 1
-
-	assert.Equal(t, 0, auxiliars.Get(0, 0, test_board))
-	assert.Equal(t, 1, auxiliars.Get(1, 1, test_board))
-	assert.Equal(t, -1, auxiliars.Get(25, 33, test_board))
-}
-
 func TestGetRandomPositionBasic(t *testing.T) {
 	/*
 	 Test the GetRandomPosition function when the snake is a single cell and the

@@ -7,8 +7,6 @@ import (
 	"github.com/jnisa/snake-go/pkg/objects"
 )
 
-// TODO. when updating the snake body we need to check if there's isn't coordinates that
-// should be removed from the turning points list
 func UpdateSnake(snake *objects.Snake) {
 	/*
 	 Add a new coordinate to the snake's body when no movement is detected.
@@ -89,14 +87,6 @@ func UpdateSnake(snake *objects.Snake) {
 	snake.Body = snake.Body[:len(snake.Body)-1]
 
 	isTurningPointOutFunc(snake)
-
-	// Just for testing purposes remove afterwards
-	// fmt.Println("Number of turning points: ", len(snake.TurningPoints))
-	// for _, turningPoint := range snake.TurningPoints {
-	// 	if point, ok := turningPoint["position"].([]int); ok {
-	// 		fmt.Println(point)
-	// 	}
-	// }
 }
 
 func MoveRight(snake *objects.Snake) {

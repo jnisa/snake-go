@@ -76,7 +76,6 @@ func SnakeIngestionUpdate(snake *objects.Snake, board *objects.Board) {
 		return snake.Body[0][0] == board.Food[0] && snake.Body[0][1] == board.Food[1]
 	}
 
-	// TODO. adjust this piece of code
 	addNewTile := func(snake *objects.Snake) {
 		/*
 		 Add a new tile to the snake's body.
